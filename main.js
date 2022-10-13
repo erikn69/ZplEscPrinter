@@ -1,9 +1,13 @@
 const { app, BrowserWindow } = require('electron')
 
+if (require('electron-squirrel-startup')) return app.quit();
+
 const createWindow = () => {
     const win = new BrowserWindow({
-        width: 800,
-        height: 600,
+        width: 535,
+        height: 768,
+        frame: false,
+        resizable: false,
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false,
