@@ -1,0 +1,28 @@
+{
+  "name": "zplprinter",
+  "version": "1.0.0",
+  "description": "Printer emulator for zpl rendering engine.",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MrL0co/ZplPrinter.git"
+  },
+  "author": "MrL0co <beheer.loco@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MrL0co/ZplPrinter/issues"
+  },
+  "homepage": "https://github.com/MrL0co/ZplPrinter#readme",
+  "devDependencies": {
+    "electron": "^21.1.0"
+  },
+  "dependencies": {
+    "bootstrap": "3.3.1",
+    "electron-store": "^8.1.0",
+    "jquery": "^3.6.1"
+  }
+}
