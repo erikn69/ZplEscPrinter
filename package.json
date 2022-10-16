@@ -36,7 +36,10 @@
   },
   "config": {
     "forge": {
-      "packagerConfig": {},
+      "packagerConfig": {
+        "name": "Zpl Printer",
+        "icon": "./icons/icon"
+      },
       "makers": [
         {
           "name": "@rabbitholesyndrome/electron-forge-maker-portable",
@@ -45,7 +48,9 @@
         {
           "name": "@electron-forge/maker-squirrel",
           "config": {
-            "name": "zplprinter"
+            "name": "ZplPrinter",
+            "iconUrl": "https://github.com/MrL0co/ZplPrinter/blob/electron/icons/icon.ico?raw=true",
+            "setupIcon": "./icons/icon.ico"
           }
         },
         {
@@ -57,7 +62,11 @@
         },
         {
           "name": "@electron-forge/maker-deb",
-          "config": {}
+          "config": {
+            "options": {
+              "icon": "./icons/png/512x512.png"
+            }
+          }
         },
         {
           "name": "@electron-forge/maker-rpm",

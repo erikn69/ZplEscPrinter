@@ -190,3 +190,4 @@ ModelManifest.xml
 /.vs/config/applicationhost.config
 
 out/
+.idea/

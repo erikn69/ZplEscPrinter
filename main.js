@@ -8,6 +8,7 @@ const createWindow = () => {
         height: 768,
         frame: false,
         resizable: false,
+        icon: __dirname + '/icons/512x512.png',
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false,
