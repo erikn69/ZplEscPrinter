@@ -1,5 +1,6 @@
 {
-  "name": "zplprinter",
+  "name": "zpl-printer",
+  "productName": "Zpl Printer",
   "version": "1.0.0",
   "description": "Printer emulator for zpl rendering engine.",
   "main": "main.js",
@@ -7,7 +8,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "electron-forge start",
     "package": "electron-forge package",
-    "make": "electron-forge make"
+    "make": "electron-forge make",
+    "publish": "electron-forge publish"
   },
   "repository": {
     "type": "git",
@@ -25,6 +27,7 @@
     "@electron-forge/maker-rpm": "^6.0.0-beta.67",
     "@electron-forge/maker-squirrel": "^6.0.0-beta.67",
     "@electron-forge/maker-zip": "^6.0.0-beta.67",
+    "@electron-forge/publisher-github": "^6.0.0-beta.67",
     "@rabbitholesyndrome/electron-forge-maker-portable": "^0.1.1",
     "electron": "^21.1.0"
   },
@@ -32,47 +35,7 @@
     "bootstrap": "3.3.1",
     "electron-squirrel-startup": "^1.0.0",
     "electron-store": "^8.1.0",
-    "jquery": "^3.6.1"
-  },
-  "config": {
-    "forge": {
-      "packagerConfig": {
-        "name": "Zpl Printer",
-        "icon": "./icons/icon"
-      },
-      "makers": [
-        {
-          "name": "@rabbitholesyndrome/electron-forge-maker-portable",
-          "config": {}
-        },
-        {
-          "name": "@electron-forge/maker-squirrel",
-          "config": {
-            "name": "ZplPrinter",
-            "iconUrl": "https://github.com/MrL0co/ZplPrinter/blob/electron/icons/icon.ico?raw=true",
-            "setupIcon": "./icons/icon.ico"
-          }
-        },
-        {
-          "name": "@electron-forge/maker-zip",
-          "platforms": [
-            "darwin",
-            "linux"
-          ]
-        },
-        {
-          "name": "@electron-forge/maker-deb",
-          "config": {
-            "options": {
-              "icon": "./icons/png/512x512.png"
-            }
-          }
-        },
-        {
-          "name": "@electron-forge/maker-rpm",
-          "config": {}
-        }
-      ]
-    }
+    "jquery": "^3.6.1",
+    "update-electron-app": "^2.0.1"
   }
 }

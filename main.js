@@ -1,3 +1,5 @@
+require('update-electron-app')()
+
 const { app, BrowserWindow } = require('electron')
 
 if (require('electron-squirrel-startup')) return app.quit();
