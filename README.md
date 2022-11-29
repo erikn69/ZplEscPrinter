@@ -2,11 +2,34 @@
 
 Printer emulator for zpl rendering engine. The emulator is based on the [labelary](http://labelary.com/service.html) web service. You can configure print density, label size and the tcp server to listen for any incoming labels.
 
+[Releases](https://github.com/MrL0co/ZplPrinter/releases/latest)
+
+## New in Version 2.0
+
+The app now runs standalone via Electron and can be installed via the binaries/zips on the GitHub Releases page. It currently supports:
+
+* Windows:
+  * Squarrel installer (zpl-printer-**version**-win32-**arch**-setup.exe)
+  * Portable runner (zpl-printer-portable-**version**.exe)
+  * NuGet package (zpl-printer-**version**-full.nupkg)
+  * msi installer (TODO)
+* Linux:
+  * Rpm (zpl-printer-**version**.**arch**.rpm)
+  * Deb (zpl-printer\_**version**\_**arch**.deb)
+  * Zip (Zpl.Printer-linux-**arch**-**version**.zip)
+* Mac:
+  * Zip (Zpl.Printer-darwin-**arch**-**version**.zip)
+
 ## References
 * [ZPL Command Support](http://labelary.com/docs.html)
 * [ZPL Web Service](http://labelary.com/service.html)
+* [Electron](https://www.electronjs.org)
+* [Electron Forge](https://www.electronforge.io)
 
 ## Release notes
+
+### Version 2.0
+* **Refactor** Reworked entire app to run in an Electron app instead of the Chrome Plugin API
 
 ### Version 1.6
 * **Fix** PDF label export.
@@ -29,6 +52,7 @@ Printer emulator for zpl rendering engine. The emulator is based on the [labelar
 
 * **Change** Labelary web service call from GET to POST to support large ZPL templates. (Thanks to [pitufo](https://github.com/sbinkert/ZplPrinter/issues/1))
 
-## Download
+### Contributing
 
-<a target="_blank" href="https://chrome.google.com/webstore/detail/zpl-printer/phoidlklenidapnijkabnfdgmadlcmjo"><img alt="Try it now" src="https://raw.github.com/GoogleChrome/chrome-app-samples/master/tryitnowbutton_small.png" title="Click here to install ZplPrinter from the Chrome Web Store"/></a>
+checkout the project. run `yarn install`. use `yarn start` to run in development mode and use `yarn make` to generate binaries for your OS
+
