@@ -31,7 +31,6 @@ ipcMain.on('select-dirs', async (event, arg) => {
         properties: ['openDirectory']
     })
     event.sender.send('selected-dirs', result.filePaths)
-
 })
 
 app.whenReady().then(() => {
