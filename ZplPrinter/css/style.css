@@ -19,7 +19,7 @@ input:required:invalid, input:focus:invalid { border-color: #d9534f; }
     border: 1px solid transparent;
     border-color: #e7e7e7 !important;
     border-radius: 4px;
-    height: 623px;
+    height: 80vh;
     overflow: auto;
 }
 
@@ -27,10 +27,13 @@ input:required:invalid, input:focus:invalid { border-color: #d9534f; }
 
 .thumbnail { margin: 20px auto; }
 
+.navbar-toggle {
+    display: block !important;
+}
 .navbar-btn-toggle {
     float: right;
     margin-bottom: 8px;
-    margin-right: 15px;
+    margin-right: 10px;
     margin-top: 8px;
     position: relative;
 }
@@ -47,4 +50,26 @@ input:required:invalid, input:focus:invalid { border-color: #d9534f; }
 .panel-heading-blur {
     background-color: #215480 !important;
     border-color: #215480 !important;
+}
+table {
+    width: 100%;
+}
+
+/* Notify */
+.notifications {
+  position: fixed;
+  z-index: 9999;
+  width: 533px;
+}
+
+/* Positioning */ 
+.notifications.bottom-left {
+  left: 1px;
+  bottom: 1px;
+}
+
+/* Notification Element */
+.notifications > div {
+  position: relative;
+  margin: 0;
 }

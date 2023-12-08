@@ -1,41 +1,42 @@
 {
   "name": "zpl-printer",
   "productName": "Zpl Printer",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Printer emulator for zpl rendering engine.",
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "electron-forge start",
+    "start": "NODE_ENV=development ELECTRON_ENABLE_LOGGING=1 ELECTRON_DISABLE_SECURITY_WARNINGS=1 electron-forge start",
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/MrL0co/ZplPrinter.git"
+    "url": "git+https://github.com/erikn69/ZplPrinter.git"
   },
-  "author": "MrL0co <beheer.loco@gmail.com>",
+  "author": "ErikN <er.niebla@gmail.com>",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/MrL0co/ZplPrinter/issues"
+    "url": "https://github.com/erikn69/ZplPrinter/issues"
   },
-  "homepage": "https://github.com/MrL0co/ZplPrinter#readme",
+  "homepage": "https://github.com/erikn69/ZplPrinter#readme",
   "devDependencies": {
-    "@electron-forge/cli": "^6.0.0-beta.67",
-    "@electron-forge/maker-deb": "^6.0.0-beta.67",
-    "@electron-forge/maker-rpm": "^6.0.0-beta.67",
-    "@electron-forge/maker-squirrel": "^6.0.0-beta.67",
-    "@electron-forge/maker-zip": "^6.0.0-beta.67",
-    "@electron-forge/publisher-github": "^6.0.0-beta.67",
-    "@rabbitholesyndrome/electron-forge-maker-portable": "^0.1.1",
-    "electron": "^21.1.0"
+    "@electron-forge/cli": "^7.0.0",
+    "@electron-forge/maker-deb": "^7.0.0",
+    "@electron-forge/maker-rpm": "^7.0.0",
+    "@electron-forge/maker-squirrel": "^7.0.0",
+    "@electron-forge/maker-zip": "^7.0.0",
+    "@electron-forge/publisher-github": "^7.0.0",
+    "@rabbitholesyndrome/electron-forge-maker-portable": "^0.2.0",
+    "electron": "^22.3.23"
   },
   "dependencies": {
-    "bootstrap": "3.3.1",
+    "bootbox": "^4.4.0",
+    "bootstrap": "^3.3.7",
     "electron-squirrel-startup": "^1.0.0",
     "electron-store": "^8.1.0",
-    "jquery": "^3.6.1",
-    "update-electron-app": "^2.0.1"
+    "jquery": "^3.7.1",
+    "update-electron-app": "^3.0.0"
   }
 }

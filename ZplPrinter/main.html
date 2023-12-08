@@ -1,39 +1,47 @@
 <html>
 
 <head>
-    <title>Zpl Printer</title>
-    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="bootstrap/css/bootstrap-notify.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="css/style.css" />
-    <script src="jquery/jquery-2.1.1.min.js"></script>
+    <title>Printer Emulator</title>
+    <link href="../node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="css/style.css?x=1" />
     <script src="js/main.js"></script>
-    <script src="bootstrap/js/bootstrap.min.js"></script>
-    <script src="bootstrap/js/bootstrap-notify.js"></script>
-    <script src="bootstrap/js/bootbox.min.js"></script>
+    <script src="../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="../node_modules/bootbox/bootbox.min.js"></script>
 </head>
 
 <body>
     <div class="panel panel-primary" style="height: 100%; width: 100%;margin-bottom: 0;">
         <div id="panel-head" class="panel-heading" style="-webkit-app-region: drag;">
-            <img src="icons/Icon-16-white.png"><span style="margin-left: 10px;">Zpl Printer</span>
+            <img src="icons/Icon-16-white.png"><span style="margin-left: 10px;"><span class='panel-printer-title'>Zpl</span> Printer - EN Systems</span>
             <button id="btn-close" type="button" class="close" style="-webkit-app-region: no-drag;"><span>&times;</span></button>
         </div>
-        <div class="panel-body">
-            <nav class="navbar navbar-default" role="navigation">
+        <div class="panel-body" style="padding-bottom: 0;">
+            <nav class="navbar navbar-default" role="navigation" style="padding-left: 10px;">
                 <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="modal" data-target="#settings-window">
-                        <span class="sr-only">Toggle navigation</span>
+                    <button type="button" class="navbar-toggle" data-toggle="modal" data-target="#settings-window" title="Printer Settings">
+                        <span class="sr-only">Printer Settings</span>
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <button id="btn-remove" class="btn navbar-toggle" type="button"> <span class="glyphicon glyphicon-trash"></span> </button>
+                    <button id="btn-remove" class="btn navbar-toggle" type="button" title="Remove Labels">
+                        <span class="glyphicon glyphicon-trash"></span>
+                    </button>
                     <div class="navbar-btn-toggle">
-                        <div class="btn-group btn-toggle">
-                            <button id="btn-on" class=" btn btn-default">ON</button>
-                            <button id="btn-off" class="btn btn-primary active">OFF</button>
+                        <div id='on_off' class="btn-group btn-toggle">
+                            <button id="btn-on"  class="btn btn-default" title="Start TCP Socket">ON</button>
+                            <button id="btn-off" class="btn btn-primary active" title="Stop TCP Socket">OFF</button>
                         </div>
                     </div>
+                    <div class="navbar-btn-toggle" style="float: left; display: none;">
+                        <div id='printer-type' class="btn-group btn-toggle">
+                            <button id="btn-zpl" class="btn btn-primary active">ZPL</button>
+                            <button id="btn-esc" class="btn btn-default">ESC/POS</button>
+                        </div>
+                    </div>
+                    <button id="btn-test" class="btn navbar-toggle" type="button" title="Test Printer" style="float: left;" data-toggle="modal" data-target="#printer-test">
+                        <span class="glyphicon glyphicon-send"></span>
+                    </button>
                 </div>
             </nav>
             <div class="label-container">
@@ -45,14 +53,41 @@
     <!-- Notification -->
     <div class='notifications bottom-left'></div>
     <!-- Modal -->
-    <div class="modal fade" id="settings-window" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal fade" id="printer-test" tabindex="-1" role="dialog" aria-labelledby="mdlPrinterTest" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                    <h4 class="modal-title" id="myModalLabel">Printer Settings</h4>
+                    <h4 class="modal-title" id="mdlPrinterTest"><span class='panel-printer-title'>Zpl</span> Printer Test</h4>
                 </div>
-                <form id="configsForm" class=" form-horizontal">
+                <form id="testsForm" class="form-horizontal">
+                    <div class="modal-body">
+                        <div class="container">
+                            <div class="control-group">
+                                <label class="control-label" for="test-data">Raw Text Data:</label>
+                                <div class="controls">
+                                    <textarea id="test-data" class="form-control" placeholder="Raw Data" rows="24" required></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button id="btn-run-test-hw" type="button" class="btn btn-success">Hello Word</button>
+                        <button id="btn-run-test" type="submit" class="btn btn-primary">Print</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="settings-window" tabindex="-1" role="dialog" aria-labelledby="mdlLabelSettings" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="mdlLabelSettings"><span class='panel-printer-title'>Zpl</span> Printer Settings</h4>
+                </div>
+                <form id="configsForm" class="form-horizontal">
                     <div class="modal-body">
                         <div class="container">
                             <div class="control-group">
@@ -81,15 +116,13 @@
                                         <td>
                                             <div class="input-group" style="padding-right: 10px;">
                                                 <span class="input-group-addon">Width</span>
-                                                <input id="width" name="width" class="form-control" placeholder="4" step="0.01" required type="number" maxlength="2" min="1"
-                                                    max="200">
+                                                <input id="width" name="width" class="form-control" placeholder="4" step="0.01" required type="number" maxlength="2" min="1">
                                             </div>
                                         </td>
                                         <td>
                                             <div class="input-group" style="padding-right: 10px;">
                                                 <span class="input-group-addon">Height</span>
-                                                <input id="height" name="height" class="form-control" placeholder="6" step="0.01" required type="number" maxlength="2" min="1"
-                                                    max="200">
+                                                <input id="height" name="height" class="form-control" placeholder="6" step="0.01" required type="number" maxlength="2" min="1">
                                             </div>
                                         </td>
                                         <td width="30%">
@@ -101,6 +134,7 @@
                                                     <li aria-valuenow="1"><a href="#">inches (in)</a></li>
                                                     <li aria-valuenow="2"><a href="#">centimeters (cm)</a></li>
                                                     <li aria-valuenow="3"><a href="#">millimeters (mm)</a></li>
+                                                    <li aria-valuenow="4"><a href="#">pixeles (px)</a></li>
                                                 </ul>
                                             </div>
                                         </td>
@@ -142,15 +176,15 @@
                                         <td width="50%">
                                             <div class="checkbox" style="padding-right: 10px;">
                                                 <label>
-                                                        <input id="ckb-keep-tcp-socket" type="checkbox" />
-                                                        Keep TCP socket alive
-                                                        <a
-                                                          href="#"
-                                                          data-toggle="tooltip"
-                                                          title="Useful when using redirection serial port programs (eg socat on Linux).">
-                                                            <span  class="glyphicon glyphicon-question-sign"></span>
-                                                        </a>
-                                                    </label>
+                                                    <input id="ckb-keep-tcp-socket" type="checkbox" />
+                                                    Keep TCP socket alive
+                                                    <a
+                                                      href="#"
+                                                      data-toggle="tooltip"
+                                                      title="Useful when using redirection serial port programs (eg socat on Linux).">
+                                                        <span  class="glyphicon glyphicon-question-sign"></span>
+                                                    </a>
+                                                </label>
                                             </div>
                                         </td>
                                     </tr>
@@ -177,6 +211,7 @@
                                                 <ul id="filetype" class="dropdown-menu" role="menu">
                                                     <li aria-valuenow="1"><a href="#">PNG</a></li>
                                                     <li aria-valuenow="2"><a href="#">PDF</a></li>
+                                                    <li aria-valuenow="3"><a href="#">RAW</a></li>
                                                 </ul>
                                             </div>
                                         </td>
@@ -188,11 +223,11 @@
                                         <td>
                                             <div class="input-group" style="padding-right: 10px;">
                                                 <span class="input-group-addon">Path</span>
-                                                <input id="txt-path" name="path" class="form-control" type="text" required disabled>
+                                                <input id="txt-path" name="path" class="form-control" type="text" disabled required>
                                             </div>
                                         </td>
                                         <td>
-                                            <button id="btn-path" type="button" class="btn btn-default" disabled>Choose</button>
+                                            <button id="btn-path" type="button" class="btn btn-default">Choose</button>
                                         </td>
                                     </tr>
                                 </table>
