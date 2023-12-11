@@ -1,75 +1,28 @@
-﻿html {
-    margin: 0;
-    padding: 0;
+﻿@import "../../node_modules/bootstrap/dist/css/bootstrap.min.css";
+@import "../../node_modules/glyphicons-only-bootstrap/css/bootstrap.min.css";
+
+::-webkit-scrollbar-thumb {
+    display: none;
 }
 
-body {
-    margin: 0;
-    padding: 0;
+img.thumbnail {
+    margin: 5px 0px 20px 5px;
 }
 
-input:required:invalid, input:focus:invalid { border-color: #d9534f; }
-
-::-webkit-scrollbar-thumb { display: none; }
-
-.panel, .panel-heading { border-radius: 0 !important; }
-
-.label-container {
-    background-color: #f8f8f8;
-    border: 1px solid transparent;
-    border-color: #e7e7e7 !important;
-    border-radius: 4px;
-    height: 80vh;
-    overflow: auto;
+.notifications .alert .glyphicon {
+    font-size: 1.45rem!important;
 }
 
-#label { position: relative; }
-
-.thumbnail { margin: 20px auto; }
-
-.navbar-toggle {
-    display: block !important;
+.notifications .alert .msg {
+    font-size: 0.75rem!important;
 }
-.navbar-btn-toggle {
-    float: right;
-    margin-bottom: 8px;
+
+input[type=checkbox]._big, input[type=radio]._big, ._big>input[type=checkbox], ._big>input[type=radio] {
+    vertical-align: middle;
+    -ms-transform: scale(1.5);
+    -moz-transform: scale(1.5);
+    -webkit-transform: scale(1.5);
+    -o-transform: scale(1.5);
+    margin-top: 5px;
     margin-right: 10px;
-    margin-top: 8px;
-    position: relative;
-}
-
-.modal-backdrop {
-    height: 725px !important;
-    margin: 42px 1px 1px !important;
-}
-
-.modal-content { top: 42px; }
-
-#info { padding-left: 10px; }
-
-.panel-heading-blur {
-    background-color: #215480 !important;
-    border-color: #215480 !important;
-}
-table {
-    width: 100%;
-}
-
-/* Notify */
-.notifications {
-  position: fixed;
-  z-index: 9999;
-  width: 533px;
-}
-
-/* Positioning */ 
-.notifications.bottom-left {
-  left: 1px;
-  bottom: 1px;
-}
-
-/* Notification Element */
-.notifications > div {
-  position: relative;
-  margin: 0;
 }

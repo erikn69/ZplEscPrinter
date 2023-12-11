@@ -2,7 +2,7 @@
 
 Printer emulator for zpl rendering engine. The emulator is based on the [labelary](http://labelary.com/service.html) web service. You can configure print density, label size and the tcp server to listen for any incoming labels.
 
-[Releases](https://github.com/MrL0co/ZplPrinter/releases/latest)
+[Releases](https://github.com/erikn69/ZplPrinter/releases/latest)
 
 ## New in Version 2.0
 
@@ -27,6 +27,16 @@ The app now runs standalone via Electron and can be installed via the binaries/z
 * [Electron Forge](https://www.electronforge.io)
 
 ## Release notes
+
+### Version 2.2
+* **Refactor** Reworked code
+* **Upgrade** Bump dependencies
+
+### Version 2.1
+* **Refactor** Reworked entire app
+* **Fix** Save labels
+* **New** Support raw text file on save labels
+* **New** Support pixels for width/height
 
 ### Version 2.0
 * **Refactor** Reworked entire app to run in an Electron app instead of the Chrome Plugin API

@@ -57,8 +57,6 @@ jobs:
         include:
           - os: windows-latest
             arch: ia32
-          - os: windows-latest
-            arch: i386
           - os: ubuntu-latest
             arch: armv7l
         # Publishing artifacts for multiple Windows architectures has

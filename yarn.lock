@@ -2,6 +2,11 @@
 # yarn lockfile v1
 
 
+"@popperjs/core@^2.0.0", "@popperjs/core@^2.11.8":
+  "integrity" "sha512-P1st0aksCrn9sGZhp8GMYwBnQsbvAWsZAX44oXNNvLHGqAOcoVxmjZiohstwQ7SqKnbR47akdNi+uleWD8+g6A=="
+  "resolved" "https://registry.npmjs.org/@popperjs/core/-/core-2.11.8.tgz"
+  "version" "2.11.8"
+
 "ajv-formats@^2.1.1":
   "integrity" "sha512-Wx0Kx52hxE7C18hkMEggYlEifqWZtYaRgouJor+WMdPnQyEK13vgEWyVNup7SoeeoLMsr4kf5h6dOW11I15MUA=="
   "resolved" "https://registry.npmjs.org/ajv-formats/-/ajv-formats-2.1.1.tgz"
@@ -34,15 +39,15 @@
   "resolved" "https://registry.npmjs.org/atomically/-/atomically-1.7.0.tgz"
   "version" "1.7.0"
 
-"bootbox@^4.4.0":
-  "integrity" "sha512-A07f3gj3XGg/g8esHY1L+mPnjuN9SpbRGA7ZOTe+FtQKV5dOxvh/B9AYVqalROS+MJdBZOMg2Z0bFOqUiCV8zg=="
-  "resolved" "https://registry.npmjs.org/bootbox/-/bootbox-4.4.0.tgz"
-  "version" "4.4.0"
+"bootbox@^6.0.0":
+  "integrity" "sha512-+Calbj1v5UvxAXXDAHfoBlsx63Hcz1JqHaZdJ5EjIcOlkyAbZLCreVScx0Em6ZUvsMCqynuz/3nGDyd9FtFrNQ=="
+  "resolved" "https://registry.npmjs.org/bootbox/-/bootbox-6.0.0.tgz"
+  "version" "6.0.0"
 
-"bootstrap@^3.3.7":
-  "integrity" "sha512-yN5oZVmRCwe5aKwzRj6736nSmKDX7pLYwsXiCj/EYmo16hODaBiT4En5btW/jhBF/seV+XMx3aYwukYC3A49DA=="
-  "resolved" "https://registry.npmjs.org/bootstrap/-/bootstrap-3.4.1.tgz"
-  "version" "3.4.1"
+"bootstrap@^4.4.0 || ^5.0.0", "bootstrap@^5.3.2":
+  "integrity" "sha512-D32nmNWiQHo94BKHLmOrdjlL05q1c8oxbtBphQFb9Z5to6eGRDCm0QgeaZ4zFBHzfg2++rqa2JkqCcxDy0sH0g=="
+  "resolved" "https://registry.npmjs.org/bootstrap/-/bootstrap-5.3.2.tgz"
+  "version" "5.3.2"
 
 "conf@^10.2.0":
   "integrity" "sha512-8fLl9F04EJqjSqH+QjITQfJF8BrOVaYr1jewVgSRAEWePfxT0sku4w2hrGQ60BC/TNLGQ2pgxNlTbWQmMPFvXg=="
@@ -120,6 +125,11 @@
   dependencies:
     "is-url" "^1.1.0"
 
+"glyphicons-only-bootstrap@^1.0.1":
+  "integrity" "sha512-A1zP7yDUC/3+GUFbVTaTw9X2xZWNPLMp0BOsAmkLoWmo1KaNpG1qGdPYo8JnzwGueJ2HQAYvlP9S9OcmcObzHA=="
+  "resolved" "https://registry.npmjs.org/glyphicons-only-bootstrap/-/glyphicons-only-bootstrap-1.0.1.tgz"
+  "version" "1.0.1"
+
 "is-obj@^2.0.0":
   "integrity" "sha512-drqDG3cbczxxEJRoOXcOjtdp1J/lyp1mNn0xaznRs8+muBhgQcrnbspox5X5fOw0HnMnbfDzvnEMEtqDEJEo8w=="
   "resolved" "https://registry.npmjs.org/is-obj/-/is-obj-2.0.0.tgz"
@@ -130,7 +140,7 @@
   "resolved" "https://registry.npmjs.org/is-url/-/is-url-1.2.4.tgz"
   "version" "1.2.4"
 
-"jquery@^3.7.1":
+"jquery@^3.5.1", "jquery@^3.7.1":
   "integrity" "sha512-m4avr8yL8kmFN8psrbFFFmB/If14iN5o9nw/NgnnM+kybDJpRsAynV2BsfpTYrTRysYUdADVD7CkUUizgkpLfg=="
   "resolved" "https://registry.npmjs.org/jquery/-/jquery-3.7.1.tgz"
   "version" "3.7.1"

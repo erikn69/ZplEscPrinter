@@ -1,78 +1,75 @@
-<html>
+<html class="p-0 m-0">
 
 <head>
     <title>Printer Emulator</title>
-    <link href="../node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="css/style.css?x=1" />
-    <script src="js/main.js"></script>
-    <script src="../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script src="../node_modules/bootbox/bootbox.min.js"></script>
+    <link href="css/style.css" type="text/css" rel="stylesheet"/>
+    <script src="js/main.js" type="module"></script>
 </head>
 
-<body>
-    <div class="panel panel-primary" style="height: 100%; width: 100%;margin-bottom: 0;">
-        <div id="panel-head" class="panel-heading" style="-webkit-app-region: drag;">
-            <img src="icons/Icon-16-white.png"><span style="margin-left: 10px;"><span class='panel-printer-title'>Zpl</span> Printer - EN Systems</span>
-            <button id="btn-close" type="button" class="close" style="-webkit-app-region: no-drag;"><span>&times;</span></button>
+<body class="p-0 m-0">
+    <div class="card border-0 rounded-0 h-100 w-100 mb-0">
+        <div class="card-header text-bg-primary rounded-0">
+            <img src="icons/Icon-16-white.png" class="me-2">
+            <b><span class='panel-printer-title'>Zpl</span> Printer</b> - EN Systems</span>
+            <button id="btn-close" type="button" class="btn-close float-end" aria-label="Close"></button>
         </div>
-        <div class="panel-body" style="padding-bottom: 0;">
-            <nav class="navbar navbar-default" role="navigation" style="padding-left: 10px;">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="modal" data-target="#settings-window" title="Printer Settings">
-                        <span class="sr-only">Printer Settings</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <button id="btn-remove" class="btn navbar-toggle" type="button" title="Remove Labels">
-                        <span class="glyphicon glyphicon-trash"></span>
-                    </button>
-                    <div class="navbar-btn-toggle">
-                        <div id='on_off' class="btn-group btn-toggle">
-                            <button id="btn-on"  class="btn btn-default" title="Start TCP Socket">ON</button>
-                            <button id="btn-off" class="btn btn-primary active" title="Stop TCP Socket">OFF</button>
-                        </div>
+        <div class="card-body pb-0 mb-0">
+            <nav class="navbar navbar-light bg-light border rounded pb-1 pt-1 ps-2 pe-2 mb-3">
+                <div class="d-flex float-start mb-0">
+                    <div id='printer-type' class="btn-group invisible" role="group" aria-label="Printer Type" style="width:1px !important;">
+                        <input id="isZpl" name="printer-type" type="radio" class="btn-check" autocomplete="off">
+                        <label class="btn btn-outline-primary" for="isZpl" title="Zpl Printer">ZPL</label>
+
+                        <input id="isEsc" name="printer-type" type="radio" class="btn-check" autocomplete="off" checked>
+                        <label class="btn btn-outline-primary" for="isEsc" title="ESC/POS Printer">ESC/POS</label>
                     </div>
-                    <div class="navbar-btn-toggle" style="float: left; display: none;">
-                        <div id='printer-type' class="btn-group btn-toggle">
-                            <button id="btn-zpl" class="btn btn-primary active">ZPL</button>
-                            <button id="btn-esc" class="btn btn-default">ESC/POS</button>
-                        </div>
+                    <button id="btn-test" class="btn btn-outline-primary ms-2" type="button" title="Test Printer" data-bs-toggle="modal" data-bs-target="#printer-test">
+                        <i class="glyphicon glyphicon-send"></i>
+                    </button>
+                </div>
+                <div class="d-flex float-end mb-0">
+                    <div id='on_off' class="btn-group" role="group" aria-label="TCP Socket">
+                        <input id="isOn" name="tcp-socket" type="radio" class="btn-check" autocomplete="off">
+                        <label class="btn btn-outline-primary" for="isOn" title="Start TCP Socket">ON</label>
+
+                        <input id="isOff" name="tcp-socket" type="radio" class="btn-check" autocomplete="off" checked>
+                        <label class="btn btn-outline-primary" for="isOff" title="Stop TCP Socket">OFF</label>
                     </div>
-                    <button id="btn-test" class="btn navbar-toggle" type="button" title="Test Printer" style="float: left;" data-toggle="modal" data-target="#printer-test">
-                        <span class="glyphicon glyphicon-send"></span>
+                    <button id="btn-remove" class="btn btn-outline-primary ms-2" type="button" title="Remove Labels">
+                        <i class="glyphicon glyphicon-trash"></i>
+                    </button>
+                    <button id="btn-setting" class="btn btn-outline-primary ms-2" type="button" data-bs-toggle="modal" data-bs-target="#settings-window" aria-label="Printer Settings" title="Printer Settings">
+                        <i class="glyphicon glyphicon-cog"></i>
                     </button>
                 </div>
             </nav>
-            <div class="label-container">
-                <div id="label">
-                </div>
+            <div class="label-container bg-light border rounded overflow-auto" style="height: 82vh;">
+                <div id="label" class="position-relative"></div>
             </div>
         </div>
     </div>
     <!-- Notification -->
-    <div class='notifications bottom-left'></div>
-    <!-- Modal -->
-    <div class="modal fade" id="printer-test" tabindex="-1" role="dialog" aria-labelledby="mdlPrinterTest" aria-hidden="true">
+    <div class='notifications bottom-left position-fixed w-100' style="z-index: 9999; left: 1px; bottom: 1px;"></div>
+    <!-- Modals -->
+    <div class="modal fade" id="printer-test" tabindex="-1" aria-labelledby="mdlPrinterTest" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                    <h4 class="modal-title" id="mdlPrinterTest"><span class='panel-printer-title'>Zpl</span> Printer Test</h4>
+                <div class="modal-header pb-1 pt-1 pe-3 ps-3">
+                    <h5 id="mdlPrinterTest" class="modal-title modal-title">
+                        <i class="glyphicon glyphicon-send pe-2"></i>
+                        <span class='panel-printer-title'>Zpl</span> Printer Test
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form id="testsForm" class="form-horizontal">
+                <form id="testsForm" class="mb-0">
                     <div class="modal-body">
-                        <div class="container">
-                            <div class="control-group">
-                                <label class="control-label" for="test-data">Raw Text Data:</label>
-                                <div class="controls">
-                                    <textarea id="test-data" class="form-control" placeholder="Raw Data" rows="24" required></textarea>
-                                </div>
-                            </div>
+                        <div class="form-floating">
+                          <textarea id="test-data" class="form-control" placeholder="Raw Text Data" style="height: 550px"></textarea>
+                          <label for="floatingTextarea2">Raw Text Data</label>
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <div class="modal-footer p-1">
+                        <button id="btn-close-test-md" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                         <button id="btn-run-test-hw" type="button" class="btn btn-success">Hello Word</button>
                         <button id="btn-run-test" type="submit" class="btn btn-primary">Print</button>
                     </div>
@@ -80,162 +77,117 @@
             </div>
         </div>
     </div>
-    <div class="modal fade" id="settings-window" tabindex="-1" role="dialog" aria-labelledby="mdlLabelSettings" aria-hidden="true">
+    <div class="modal fade" id="settings-window" tabindex="-1" aria-labelledby="mdlLabelSettings" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                    <h4 class="modal-title" id="mdlLabelSettings"><span class='panel-printer-title'>Zpl</span> Printer Settings</h4>
+                <div class="modal-header pb-1 pt-1 pe-3 ps-3">
+                    <h5 id="mdlPrinterTest" class="modal-title modal-title">
+                        <i class="glyphicon glyphicon-cog pe-2"></i>
+                        <span class='panel-printer-title'>Zpl</span> Printer Settings
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form id="configsForm" class="form-horizontal">
-                    <div class="modal-body">
-                        <div class="container">
-                            <div class="control-group">
-                                <label class="control-label" for="density">Print density:</label>
-                                <div class="controls">
-                                    <div class="input-append">
-                                        <div class="btn-group">
-                                            <button id="btn-density" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                                                Print Density <span class="caret"></span>
-                                            </button>
-                                            <ul id="density" class="dropdown-menu" role="menu">
-                                                <li aria-valuenow="6"><a href="#">6 dpmm (152 dpi)</a></li>
-                                                <li aria-valuenow="8"><a href="#">8 dpmm (203 dpi)</a></li>
-                                                <li aria-valuenow="12"><a href="#">12 dpmm (300 dpi)</a></li>
-                                                <li aria-valuenow="24"><a href="#">24 dpmm (600 dpi)</a></li>
-                                            </ul>
+                <form id="configsForm" class="mb-0">
+                    <div class="modal-body ps-2 pe-2">
+                        <fieldset class="border rounded p-2 mb-1">
+                            <legend class="float-none w-auto px-2 mb-0 fs-6 fw-semibold">Printer Properties</legend>
+                            <div class="row mb-2">
+                                <div class="col-7">
+                                    <div class="form-floating">
+                                        <select id="density" class="form-select" aria-label="Print Density">
+                                            <option value="6">6 dpmm (152 dpi)</option>
+                                            <option value="8">8 dpmm (203 dpi)</option>
+                                            <option value="12">12 dpmm (300 dpi)</option>
+                                            <option value="24">24 dpmm (600 dpi)</option>
+                                        </select>
+                                        <label for="density">Print Density</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="input-group mb-2">
+                                <div class="form-floating">
+                                    <select id="unit" class="form-select" aria-label="Unit Size">
+                                        <option value="1">inches (in)</option>
+                                        <option value="2">centimeters (cm)</option>
+                                        <option value="3">millimeters (mm)</option>
+                                        <option value="4">pixels (px)</option>
+                                    </select>
+                                    <label for="unit">Unit Size</label>
+                                </div>
+                                <div class="form-floating">
+                                    <input id="width" name="width" value="4" step="0.01" required type="number" maxlength="3" min="1" class="form-control" placeholder="Width">
+                                    <label for="width">Width</label>
+                                </div>
+                                <div class="form-floating">
+                                    <input id="height" name="height" value="6" step="0.01" required type="number" maxlength="3" min="1" class="form-control" placeholder="Height">
+                                    <label for="height">Height</label>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <fieldset class="border rounded p-2 mb-1">
+                            <legend class="float-none w-auto px-2 mb-0 fs-6 fw-semibold">Network</legend>
+                            <div class="input-group mb-2">
+                                <div class="form-floating">
+                                    <input id="host" name="host" value="127.0.0.1" required type="text" pattern="((^|\.)((25[0-5])|(2[0-4]\d)|(1\d\d)|([1-9]?\d))){4}$" class="form-control" placeholder="Host">
+                                    <label for="host">Host</label>
+                                </div>
+                                <div class="form-floating">
+                                    <input id="port" name="port" value="9100" required type="number" min="1" step="1" max="65535" class="form-control" placeholder="Port">
+                                    <label for="port">Port</label>
+                                </div>
+                            </div>
+                            <div class="input-group mb-2">
+                                <div class="form-floating">
+                                    <input id="bufferSize" name="bufferSize" value="4096" step="1" required type="number" min="1024" max="51200" class="form-control" placeholder="Buffer Size">
+                                    <label for="bufferSize">Buffer Size</label>
+                                </div>
+                                <span class="input-group-text">B</span>
+                                <span class="input-group-text">
+                                    <div class="form-check">
+                                        <input id="keepTcpSocket" type="checkbox" class="form-check-input _big">
+                                        <label class="form-check-label pe-3 me-3" for="keepTcpSocket">
+                                            Keep TCP socket alive&nbsp;&nbsp;
+                                            <a title="Useful when using redirection serial port programs (eg socat on Linux)." href="#" data-toggle="tooltip">
+                                                <span class="glyphicon glyphicon-question-sign"></span>
+                                            </a>
+                                        </label>
+                                    </div>
+                                </span>
+                            </div>
+                        </fieldset>
+                        <fieldset class="border rounded p-2 mb-1">
+                            <legend class="float-none w-auto px-2 mb-0 fs-6 fw-semibold">Storage</legend>
+                            <div class="row mb-2">
+                                <div class="col-8">
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <div class="form-check">
+                                                <input id="saveLabels" type="checkbox" class="form-check-input _big">
+                                                <label class="form-check-label" for="saveLabels">Save labels</label>
+                                            </div>
+                                        </span>
+                                        <div class="form-floating">
+                                            <select id="filetype" class="form-select" aria-label="File Type">
+                                                <option value="1">PNG</option>
+                                                <option value="2">PDF</option>
+                                                <option value="3">RAW</option>
+                                            </select>
+                                            <label for="filetype">File Type</label>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <br />
-                            <div class="control-group">
-                                <label class="control-label" for="height">Label size (inches)</label>
-                                <table>
-                                    <tr>
-                                        <td>
-                                            <div class="input-group" style="padding-right: 10px;">
-                                                <span class="input-group-addon">Width</span>
-                                                <input id="width" name="width" class="form-control" placeholder="4" step="0.01" required type="number" maxlength="2" min="1">
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="input-group" style="padding-right: 10px;">
-                                                <span class="input-group-addon">Height</span>
-                                                <input id="height" name="height" class="form-control" placeholder="6" step="0.01" required type="number" maxlength="2" min="1">
-                                            </div>
-                                        </td>
-                                        <td width="30%">
-                                            <div class="btn-group">
-                                                <button id="btn-unit" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                                                    Unit<span class="caret"></span>
-                                                </button>
-                                                <ul id="unit" class="dropdown-menu" role="menu">
-                                                    <li aria-valuenow="1"><a href="#">inches (in)</a></li>
-                                                    <li aria-valuenow="2"><a href="#">centimeters (cm)</a></li>
-                                                    <li aria-valuenow="3"><a href="#">millimeters (mm)</a></li>
-                                                    <li aria-valuenow="4"><a href="#">pixeles (px)</a></li>
-                                                </ul>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </table>
+                            <div class="input-group">
+                                <div class="form-floating">
+                                    <input id="path" name="path" value="4096" type="text" readonly disabled required class="form-control" placeholder="Directory Path">
+                                    <label for="path">Directory Path</label>
+                                </div>
+                                <button id="btn-path" type="button" class="btn btn-secondary">Choose</button>
                             </div>
-                            <br />
-                            <div class="control-group">
-                                <label class="control-label" for="height">Network</label>
-                                <table>
-                                    <tr>
-                                        <td>
-                                            <div class="input-group" style="padding-right: 10px;">
-                                                <span class="input-group-addon">Host</span>
-                                                <input id="host" name="host" class="form-control" placeholder="127.0.0.1" required pattern="((^|\.)((25[0-5])|(2[0-4]\d)|(1\d\d)|([1-9]?\d))){4}$"
-                                                    type="text">
-                                            </div>
-                                        </td>
-                                        <td width="30%">
-                                            <div class="input-group" style="padding-right: 10px;">
-                                                <span class="input-group-addon">Port</span>
-                                                <input id="port" name="port" class="form-control" placeholder="9100" type="number" min="1" max="65535" required>
-                                            </div>
-                                        </td>
-                                        <td width="30%">
-                                        </td>
-                                    </tr>
-                                </table>
-                                <br/>
-                                <table>
-                                    <tr>
-                                        <td>
-                                            <div class="input-group" style="padding-right: 10px;">
-                                                <span class="input-group-addon">Buffer</span>
-                                                <input id="bufferSize" name="bufferSize" class="form-control" placeholder="4096" required type="number" min="1024">
-                                                <span class="input-group-addon">B</span>
-                                            </div>
-                                        </td>
-                                        <td width="50%">
-                                            <div class="checkbox" style="padding-right: 10px;">
-                                                <label>
-                                                    <input id="ckb-keep-tcp-socket" type="checkbox" />
-                                                    Keep TCP socket alive
-                                                    <a
-                                                      href="#"
-                                                      data-toggle="tooltip"
-                                                      title="Useful when using redirection serial port programs (eg socat on Linux).">
-                                                        <span  class="glyphicon glyphicon-question-sign"></span>
-                                                    </a>
-                                                </label>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </div>
-                            <br />
-                            <div class="control-group">
-                                <label class="control-label" for="height">Save labels</label>
-                                <table>
-                                    <tr>
-                                        <td>
-                                            <div class="checkbox" style="padding-right: 10px;">
-                                                <label>
-                                                    <input id="ckb-saveLabels" type="checkbox"> Save labels
-                                                </label>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="btn-group" style="padding-right: 10px;">
-                                                <button id="btn-filetype" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false"
-                                                    disabled>
-                                                    Type<span class="caret"></span>
-                                                </button>
-                                                <ul id="filetype" class="dropdown-menu" role="menu">
-                                                    <li aria-valuenow="1"><a href="#">PNG</a></li>
-                                                    <li aria-valuenow="2"><a href="#">PDF</a></li>
-                                                    <li aria-valuenow="3"><a href="#">RAW</a></li>
-                                                </ul>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </table>
-                                <br />
-                                <table>
-                                    <tr>
-                                        <td>
-                                            <div class="input-group" style="padding-right: 10px;">
-                                                <span class="input-group-addon">Path</span>
-                                                <input id="txt-path" name="path" class="form-control" type="text" disabled required>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <button id="btn-path" type="button" class="btn btn-default">Choose</button>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </div>
-                        </div>
+                        </fieldset>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <div class="modal-footer p-1">
+                        <button id="btn-close-save-settings" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                         <button id="btn-save" type="submit" class="btn btn-primary">Save changes</button>
                     </div>
                 </form>

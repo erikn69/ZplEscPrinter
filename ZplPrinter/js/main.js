@@ -1,8 +1,10 @@
-const {ipcRenderer} = require('electron');
+const $ = global.$ = global.jQuery = require('jquery');
+const createPopper = global.createPopper = require('@popperjs/core');
+const Bootstrap = global.Bootstrap = require('bootstrap');
+const { ipcRenderer } = require('electron');
 const fs = require('fs');;
 const net = require('net');
-const $ = require('jquery');
-global.$ = global.jQuery = $;
+const bootbox = require('bootbox');
 
 let socketId, clientSocketInfo;
 let server;
@@ -46,8 +48,8 @@ $(document).ready(function () {
         configs[k] = global.localStorage.getItem(k);
     });
 
-    initConfigs();
     initEvents();
+    initConfigs();
 });
 
 function getSize(width, height) {
@@ -107,10 +109,10 @@ function notify(text, glyphicon, type, delay) {
     } else {
         console.info(log);
     }
-    
-    let el = $(`<div class="alert in fade alert-${type || 'success'}">
-        <span class="glyphicon glyphicon-${glyphicon || 'info-sign'} pull-left" style="font-size: 2em;top:-3px; margin-right: 10px;" aria-hidden="true"></span>
-        ${text}
+
+    let el = $(`<div class="alert alert-${type || 'success'} alert-dismissible fade show position-relative m-1" role="alert">
+        <i class="glyphicon glyphicon-${glyphicon || 'info-sign'} float-start" style="font-size: 2em;top:-3px; margin-right: 10px;" aria-hidden="true"></i>
+        <span class="msg">${text}<span>
     </div>`).appendTo('.bottom-left');
     setTimeout(function () { el.fadeOut(1000); }, delay || 2000);
 }
@@ -129,35 +131,38 @@ async function zpl(data){
 
         zpl += '^XZ';
 
+        let api_url = atob('aHR0cDovL2FwaS5sYWJlbGFyeS5jb20vdjEvcHJpbnRlcnMvezB9ZHBtbS9sYWJlbHMvezF9eHsyfS8wLw==')
+            .format(configs.density, width>15.0 ? 15 : width, height);
+        let blob = await displayImage(api_url, zpl, width, height);
+
+        if (! configs['saveLabels']) {
+            return;
+        }
+
         let items = global.localStorage.getItem('counter') || '0';
         let counter = parseInt(items);
         counter = isNaN(counter) ? 1 : counter;
-        console.log('counter?', items, counter)
+        console.log('counter?', items, counter);
 
-        let api_url = atob('aHR0cDovL2FwaS5sYWJlbGFyeS5jb20vdjEvcHJpbnRlcnMvezB9ZHBtbS9sYWJlbHMvezF9eHsyfS8wLw==').format(configs.density, width>15.0 ? 15 : width, height);
-        console.info("configs", configs["saveLabels"], "fileType", configs["fileType"])
-        let saveBin = configs['saveLabels'] && configs['filetype'] === '3';
-        let savePdf = configs['saveLabels'] && configs['filetype'] === '2';
-        let savePng = configs['saveLabels'] && configs['filetype'] === '1';
-        if (saveBin) {
-            await saveLabel(zpl, "raw", counter)
+        console.info("configs", configs["saveLabels"], "fileType", configs["fileType"]);
+        if (configs['filetype'] === '1') {
+            await saveLabel(blob, "png", counter);
         }
-        if (savePdf) {
+        else if (configs['filetype'] === '2') {
             await fetchAndSavePDF(api_url, zpl, counter);
         }
-
-        await displayAndSaveImage(api_url, zpl, width, height, savePng, counter);
+        else if (configs['filetype'] === '3') {
+            await saveLabel(zpl, "raw", counter);
+        }
 
         global.localStorage.setItem('counter', `${++counter}`);
     }
 }
-async function displayAndSaveImage(api_url, zpl, width, height, savePng, counter) {
+async function displayImage(api_url, zpl, width, height) {
     let r1 = await fetch(api_url, {
         method: "POST",
         body: zpl,
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-        }
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
     })
 
     if (!r1.ok || r1.status !== 200) {
@@ -170,7 +175,7 @@ async function displayAndSaveImage(api_url, zpl, width, height, savePng, counter
     const img = document.createElement('img');
     img.setAttribute('height', size.height);
     img.setAttribute('width', size.width);
-    img.setAttribute('class', 'thumbnail');
+    img.setAttribute('class', 'thumbnail border');
     img.onload = function (e) {
         window.URL.revokeObjectURL(img.src);
     };
@@ -182,9 +187,7 @@ async function displayAndSaveImage(api_url, zpl, width, height, savePng, counter
     $('#label').css({'top': `-${offset}px`});
     $('#label').animate({'top': '0px'}, 1500);
 
-    if (savePng) {
-        await saveLabel(blob, "png", counter)
-    }
+    return blob;
 }
 
 // Start tcp server and listen on configuret host/port
@@ -207,7 +210,6 @@ function startTcpServer() {
 
         sock.on('data', async function (data) {
             if (!configs.keepTcpSocket) {
-                stopTcpServer();
                 toggleSwitch('#on_off');
             }
             notify('{0} bytes received from Client: <b>{1}</b> Port: <b>{2}</b>'.format(data.length, clientSocketInfo.peerAddress, clientSocketInfo.peerPort), 'print', 'info', 1000);
@@ -229,99 +231,79 @@ function stopTcpServer() {
 
 // Init ui events
 function initEvents() {
-    $('#on_off').click(function () {
-        toggleSwitch(this);
-
-        if ($('#btn-on').hasClass('active')) {
+    $('#isOn, #isOff').on('change', function () {
+        if ($('#isOn').is(':checked')) {
             startTcpServer();
         } else {
             stopTcpServer();
         }
     });
 
-    $('#btn-remove').click(function () {
+    $('#btn-remove').on('click', function () {
+        const size = $('.thumbnail').length;
+
+        if (!size) {
+            return;
+        }
+
+        const label = size === 1 ? 'label' : 'labels';
+        bootbox.confirm('Are you sure to remove {0} {1}?'.format(size, label), function (result) {
+            if (result) {
+                $('.thumbnail').remove();
+                notify('{0} {1} successfully removed.'.format(size, label), 'trash', 'info');
+            }
+        });
+    });
+
+    $('#btn-save-label').on('click', function () {
         const size = $('.thumbnail').length;
 
         if (size > 0) {
             const label = size === 1 ? 'label' : 'labels';
-            bootbox.confirm('Are you sure to remove {0} {1}?'.format(size, label), function (result) {
-                if (result) {
-                    $('.thumbnail').remove();
-                    notify('{0} {1} successfully removed.'.format(size, label), 'trash', 'info');
-                }
-            });
-        }
-    });
-    $('#btn-save-label').click(function () {
-        const size = $('.thumbnail').length;
-
-        if (size > 0) {
-            const label = size === 1 ? 'label' : 'labels';
-
         }
     });
 
-    $('#btn-close').click(function () {
-        global.localStorage.setItem('isOn', $('#btn-on').hasClass('active'));
+    $('#btn-close').on('click', function () {
+        global.localStorage.setItem('isZpl', $('#isZpl').is(':checked'));
+        global.localStorage.setItem('isOn', $('#isOn').is(':checked'));
         window.close();
         stopTcpServer();
     });
 
-    $('#density li > a').click(function () {
-        const btn = $('#btn-density');
-        btn.attr('aria-valuenow', $(this).parent().attr('aria-valuenow'));
-        btn.html($(this).text() + ' <span class="caret"></span>');
-    });
-
-    $('#unit li > a').click(function () {
-        const btn = $('#btn-unit');
-        btn.attr('aria-valuenow', $(this).parent().attr('aria-valuenow'));
-        btn.html($(this).text() + ' <span class="caret"></span>');
-    });
-
-    $('#filetype li > a').click(function () {
-        const btn = $('#btn-filetype');
-        btn.attr('aria-valuenow', $(this).parent().attr('aria-valuenow'));
-        btn.html($(this).text() + ' <span class="caret"></span>');
-    });
-
-    $('#txt-path').keydown(function (e) {
+    $('#path').on('keydown', function (e) {
         e.preventDefault();
     });
 
-    $('#configsForm').submit(function (e) {
+    $('#configsForm').on('submit', function (e) {
         e.preventDefault();
         saveConfigs();
     });
 
-    $('#testsForm').submit(function (e) {
+    $('#testsForm').on('submit', function (e) {
         e.preventDefault();
-        $('#printer-test').modal('hide');
+        $('#btn-close-test-md').trigger('click');
         notify('Printing raw text test', 'print', 'info', 1000);
         zpl($('#test-data').val());
         $('#test-data').val('');
     });
-    
-    $('#btn-run-test-hw').click(function () {
+
+    $('#btn-run-test-hw').on('click', function () {
         $('#test-data').val('^xa^cfa,50^fo100,100^fdHello World^fs^xz');
         $('#testsForm').submit();
     });
 
-    $('#settings-window').on('shown.bs.modal', function () {
-        if ($('#btn-on').hasClass('active')) {
+    $('#btn-setting').on('click', function () {
+        if ($('#isOn').is(':checked')) {
             toggleSwitch('#on_off');
-            stopTcpServer();
         }
+        initConfigs($('#settings-window'));
     });
 
-    $('#ckb-saveLabels').change(function () {
-        const disabled = !$(this).is(':checked');
-        $('#btn-filetype').prop('disabled', disabled);
-        $('#btn-path').prop('disabled', disabled);
-        $('#txt-path').prop('disabled', disabled);
+    $('#saveLabels').on('change', function () {
+        $('#btn-filetype, #btn-path, #filetype, #path').prop('disabled', !$(this).is(':checked'));
     });
 
-    $('#btn-path').click(function (e) {
+    $('#btn-path').on('click', function (e) {
         e.preventDefault()
 
         ipcRenderer.send('select-dirs')
@@ -335,33 +317,26 @@ function initEvents() {
 
 // Toggle on/off switch
 // @param {Dom Object} btn Button group to toggle
-function toggleSwitch(btn) {
-    $(btn).find('.btn').toggleClass('active');
+function toggleSwitch(group) {
+    let radios = $(group).find('input[type=radio]');
+    let first = $(radios[0]).is(':checked');
 
-    if ($(btn).find('.btn-primary').length > 0) {
-        $(btn).find('.btn').toggleClass('btn-primary');
-    }
-
-    $(btn).find('.btn').toggleClass('btn-default');
+    $(radios[first?1:0]).prop('checked', true).trigger('change');
 }
 
-// Svae configs in local storage
+// Save configs in local storage
 function saveConfigs() {
     for (let key in configs) {
-        if (key == 'density') {
-            configs[key] = $('#btn-density').attr('aria-valuenow');
-        } else if (key == 'unit') {
-            configs[key] = $('#btn-unit').attr('aria-valuenow');
-        } else if (key == 'filetype') {
-            configs[key] = $('#btn-filetype').attr('aria-valuenow');
-        } else if (key == 'saveLabels') {
-            configs[key] = $('#ckb-saveLabels').is(':checked');
-        } else if (key == 'keepTcpSocket') {
-            configs[key] = $('#ckb-keep-tcp-socket').is(':checked');
-        } else if (key == 'path') {
-            configs[key] = document.getElementById('txt-path').value;
+        let $el = $('#' + key);
+
+        if (!$el.length) {
+            continue;
+        }
+
+        if (['checkbox', 'radio'].includes(($el.attr('type') || '').toLowerCase())) {
+            configs[key] = $el.is(':checked');
         } else {
-            configs[key] = $('#' + key).val();
+            configs[key] = $el.val();
         }
     }
 
@@ -369,48 +344,28 @@ function saveConfigs() {
         global.localStorage.setItem(k, v);
     });
 
-    $('#settings-window').modal('hide');
+    $('#btn-close-save-settings').trigger('click');
     notify('Printer settings changes successfully saved', 'cog', 'info');
 }
 
 // Init/load configs from local storage
-function initConfigs() {
-    configs['isZpl']=[true,'true',1,'1'].includes(configs['isZpl']);
-    configs['isOn']=[true,'true',1,'1'].includes(configs['isOn']);
-    configs['keepTcpSocket']=[true,'true',1,'1'].includes(configs['keepTcpSocket']);
-    configs['saveLabels']=[true,'true',1,'1'].includes(configs['saveLabels']);
-    console.log('init', configs)
+function initConfigs(context) {
+    console.log('init', configs);
+    context = context || $('body');
+
     for (let key in configs) {
-        if (key === 'density') {
-            initDropDown('density', configs[key]);
-        } else if (key === 'unit') {
-            initDropDown('unit', configs[key]);
-        } else if (key === 'filetype') {
-            initDropDown('filetype', configs[key]);
-        } else if (key === 'saveLabels') {
-            $('#ckb-saveLabels').prop('checked', configs[key]);
-            const disabled = !configs[key];
-            $('#btn-filetype').prop('disabled', disabled);
-            $('#btn-path').prop('disabled', disabled);
-            $('#txt-path').prop('disabled', disabled);
-        } else if (key === 'isOn' && configs[key]) {
-            toggleSwitch('#on_off');
-            startTcpServer();
-        } else if (key === 'keepTcpSocket') {
-            $('#ckb-keep-tcp-socket').prop('checked', configs[key]);
-        } else if (key === 'path' && configs[key]) {
-            document.getElementById('txt-path').value = configs[key]
+        let $el = context.find('#' + key);
+
+        if (!$el.length) {
+            continue;
+        }
+
+        if (['checkbox', 'radio'].includes(($el.attr('type') || '').toLowerCase())) {
+            $el.prop('checked', [true, 'true', 1, '1'].includes(configs[key])).trigger('change');
         } else {
-            $('#' + key).val(configs[key]);
+            $el.val(configs[key]);
         }
     }
-}
-
-function initDropDown(btnId, value) {
-    const btn = $('#btn-' + btnId);
-    const text = $('#' + btnId).find('li[aria-valuenow=' + value + '] > a').html();
-    btn.attr('aria-valuenow', value);
-    btn.html(text + ' <span class="caret"></span>');
 }
 
 // Prototype for string/number datatypes
