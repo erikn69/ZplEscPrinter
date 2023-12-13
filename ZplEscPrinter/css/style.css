@@ -5,7 +5,16 @@
     display: none;
 }
 
-img.thumbnail {
+.panel-heading-blur {
+    background-color: #445da5 !important;
+    border-color: #215480 !important;
+}
+
+.label-container {
+    height: 82vh;
+}
+
+.label-zpl {
     margin: 5px 0px 20px 5px;
 }
 

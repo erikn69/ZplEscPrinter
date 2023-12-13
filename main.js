@@ -20,7 +20,7 @@ const createWindow = () => {
         }
     })
 
-    win.loadFile('ZplPrinter/main.html')
+    win.loadFile('ZplEscPrinter/main.html')
     if(process.env.NODE_ENV === "development"){
         win.webContents.openDevTools()
     }
@@ -31,6 +31,14 @@ ipcMain.on('select-dirs', async (event, arg) => {
         properties: ['openDirectory']
     })
     event.sender.send('selected-dirs', result.filePaths)
+})
+
+ipcMain.on('select-file', async (event, arg) => {
+    const result = await dialog.showOpenDialog(win, {
+        properties: ['openFile'],
+        filters: [{ name: 'Raw Print', extensions: ['raw'] }]
+    })
+    event.sender.send('selected-file', result.filePaths)
 })
 
 app.whenReady().then(() => {

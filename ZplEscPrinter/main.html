@@ -8,15 +8,15 @@
 
 <body class="p-0 m-0">
     <div class="card border-0 rounded-0 h-100 w-100 mb-0">
-        <div class="card-header text-bg-primary rounded-0">
+        <div id="panel-head" class="card-header text-bg-primary rounded-0" style="-webkit-app-region: drag;">
             <img src="icons/Icon-16-white.png" class="me-2">
             <b><span class='panel-printer-title'>Zpl</span> Printer</b> - EN Systems</span>
-            <button id="btn-close" type="button" class="btn-close float-end" aria-label="Close"></button>
+            <button id="btn-close" type="button" class="btn-close float-end" aria-label="Close" style="-webkit-app-region: no-drag;"></button>
         </div>
         <div class="card-body pb-0 mb-0">
-            <nav class="navbar navbar-light bg-light border rounded pb-1 pt-1 ps-2 pe-2 mb-3">
-                <div class="d-flex float-start mb-0">
-                    <div id='printer-type' class="btn-group invisible" role="group" aria-label="Printer Type" style="width:1px !important;">
+            <nav class="navbar navbar-light bg-light border rounded pb-0 pt-1 ps-2 pe-2 mb-3">
+                <div class="d-flex float-start mb-1">
+                    <div id='printer-type' class="btn-group" role="group" aria-label="Printer Type">
                         <input id="isZpl" name="printer-type" type="radio" class="btn-check" autocomplete="off">
                         <label class="btn btn-outline-primary" for="isZpl" title="Zpl Printer">ZPL</label>
 
@@ -27,7 +27,7 @@
                         <i class="glyphicon glyphicon-send"></i>
                     </button>
                 </div>
-                <div class="d-flex float-end mb-0">
+                <div class="d-flex float-end mb-1">
                     <div id='on_off' class="btn-group" role="group" aria-label="TCP Socket">
                         <input id="isOn" name="tcp-socket" type="radio" class="btn-check" autocomplete="off">
                         <label class="btn btn-outline-primary" for="isOn" title="Start TCP Socket">ON</label>
@@ -43,15 +43,18 @@
                     </button>
                 </div>
             </nav>
-            <div class="label-container bg-light border rounded overflow-auto" style="height: 82vh;">
-                <div id="label" class="position-relative"></div>
+            <div id="escpos-container" class="label-container bg-light border rounded overflow-auto is-esc">
+                <div id="label-esc" class="position-relative"></div>
+            </div>
+            <div id="zpl-container" class="label-container bg-light border rounded overflow-auto is-zpl">
+                <div id="label-zpl" class="position-relative"></div>
             </div>
         </div>
     </div>
     <!-- Notification -->
     <div class='notifications bottom-left position-fixed w-100' style="z-index: 9999; left: 1px; bottom: 1px;"></div>
     <!-- Modals -->
-    <div class="modal fade" id="printer-test" tabindex="-1" aria-labelledby="mdlPrinterTest" aria-hidden="true">
+    <div class="modal fade" id="printer-test" tabindex="-1" aria-labelledby="mdlPrinterTest" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header pb-1 pt-1 pe-3 ps-3">
@@ -59,7 +62,7 @@
                         <i class="glyphicon glyphicon-send pe-2"></i>
                         <span class='panel-printer-title'>Zpl</span> Printer Test
                     </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close btn-close-test-md" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <form id="testsForm" class="mb-0">
                     <div class="modal-body">
@@ -69,15 +72,16 @@
                         </div>
                     </div>
                     <div class="modal-footer p-1">
-                        <button id="btn-close-test-md" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button id="btn-run-test-hw" type="button" class="btn btn-success">Hello Word</button>
-                        <button id="btn-run-test" type="submit" class="btn btn-primary">Print</button>
+                        <button id="btn-close-test-md" type="button" class="btn btn-secondary btn-close-test-md" data-bs-dismiss="modal"><i class="glyphicon glyphicon-remove"></i> Close</button>
+                        <button id="btn-run-test-hw" type="button" class="btn btn-success"><i class="glyphicon glyphicon-star"></i> Hello Word</button>
+                        <button id="btn-raw-file" type="button" class="btn btn-info"><i class="glyphicon glyphicon-file"></i> Raw File</button>
+                        <button id="btn-run-test" type="submit" class="btn btn-primary"><i class="glyphicon glyphicon-print"></i> Print</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
-    <div class="modal fade" id="settings-window" tabindex="-1" aria-labelledby="mdlLabelSettings" aria-hidden="true">
+    <div class="modal fade" id="settings-window" tabindex="-1" aria-labelledby="mdlLabelSettings" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header pb-1 pt-1 pe-3 ps-3">
@@ -85,13 +89,13 @@
                         <i class="glyphicon glyphicon-cog pe-2"></i>
                         <span class='panel-printer-title'>Zpl</span> Printer Settings
                     </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close btn-close-save-settings" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <form id="configsForm" class="mb-0">
                     <div class="modal-body ps-2 pe-2">
                         <fieldset class="border rounded p-2 mb-1">
                             <legend class="float-none w-auto px-2 mb-0 fs-6 fw-semibold">Printer Properties</legend>
-                            <div class="row mb-2">
+                            <div class="row mb-2 is-zpl">
                                 <div class="col-7">
                                     <div class="form-floating">
                                         <select id="density" class="form-select" aria-label="Print Density">
@@ -166,13 +170,19 @@
                                                 <label class="form-check-label" for="saveLabels">Save labels</label>
                                             </div>
                                         </span>
-                                        <div class="form-floating">
+                                        <div class="form-floating is-zpl">
                                             <select id="filetype" class="form-select" aria-label="File Type">
                                                 <option value="1">PNG</option>
                                                 <option value="2">PDF</option>
                                                 <option value="3">RAW</option>
                                             </select>
                                             <label for="filetype">File Type</label>
+                                        </div>
+                                        <div class="form-floating is-esc">
+                                            <select id="filetype-dump" class="form-select" aria-label="File Type" disabled>
+                                                <option value="3">RAW</option>
+                                            </select>
+                                            <label for="filetype-dump">File Type</label>
                                         </div>
                                     </div>
                                 </div>
@@ -187,8 +197,8 @@
                         </fieldset>
                     </div>
                     <div class="modal-footer p-1">
-                        <button id="btn-close-save-settings" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button id="btn-save" type="submit" class="btn btn-primary">Save changes</button>
+                        <button id="btn-close-save-settings" type="button" class="btn btn-secondary btn-close-save-settings" data-bs-dismiss="modal"><i class="glyphicon glyphicon-remove"></i> Close</button>
+                        <button id="btn-save" type="submit" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-disk"></i>  Save changes</button>
                     </div>
                 </form>
             </div>

@@ -1,32 +1,43 @@
-# ZplPrinter
+# Zpl - Esc/Pos Printer
 
-Printer emulator for zpl rendering engine. The emulator is based on the [labelary](http://labelary.com/service.html) web service. You can configure print density, label size and the tcp server to listen for any incoming labels.
+Printer emulator for Zpl, Esc/Pos rendering engine. The emulator is based on the [labelary](http://labelary.com/service.html) web service.
+You can configure print density, label size and the tcp server to listen for any incoming labels.
 
-[Releases](https://github.com/erikn69/ZplPrinter/releases/latest)
+[Releases](https://github.com/erikn69/ZplEscPrinter/releases/latest)
+
+## New in Version 3.0
+
+The app now emulates Epson ESC/POS. The emulator is based on the [receipt-print-hq/escpos-tools](https://github.com/receipt-print-hq/escpos-tools/blob/master/esc2html.php) repo by @mike42, and can be installed via the binaries/zips on the GitHub Releases page. It currently supports
+
+* Windows:
+  * Squarrel installer (zpl-escpos-printer-**version**-win32-**arch**-setup.exe)
+  * Portable runner (zpl-escpos-printer-portable-**version**.exe)
+  * NuGet package (zpl-escpos-printer-**version**-full.nupkg)
+  * msi installer (TODO)
+* Linux:
+  * Rpm (zpl-escpos-printer-**version**.**arch**.rpm)
+  * Deb (zpl-escpos-printer\_**version**\_**arch**.deb)
+  * Zip (Zpl-EscPos.Printer-linux-**arch**-**version**.zip)
+* Mac:
+  * Zip (Zpl-EscPos.Printer-darwin-**arch**-**version**.zip)
 
 ## New in Version 2.0
 
-The app now runs standalone via Electron and can be installed via the binaries/zips on the GitHub Releases page. It currently supports:
-
-* Windows:
-  * Squarrel installer (zpl-printer-**version**-win32-**arch**-setup.exe)
-  * Portable runner (zpl-printer-portable-**version**.exe)
-  * NuGet package (zpl-printer-**version**-full.nupkg)
-  * msi installer (TODO)
-* Linux:
-  * Rpm (zpl-printer-**version**.**arch**.rpm)
-  * Deb (zpl-printer\_**version**\_**arch**.deb)
-  * Zip (Zpl.Printer-linux-**arch**-**version**.zip)
-* Mac:
-  * Zip (Zpl.Printer-darwin-**arch**-**version**.zip)
+The app now runs standalone via Electron.
 
 ## References
 * [ZPL Command Support](http://labelary.com/docs.html)
 * [ZPL Web Service](http://labelary.com/service.html)
 * [Electron](https://www.electronjs.org)
 * [Electron Forge](https://www.electronforge.io)
+* [Esc/Pos receipt print tools](https://github.com/receipt-print-hq/escpos-tools)
 
 ## Release notes
+
+### Version 3.0
+* **Refactor** Reworked code
+* **New** Esc/Pos Support
+* **Fix** Bug fixes
 
 ### Version 2.2
 * **Refactor** Reworked code
