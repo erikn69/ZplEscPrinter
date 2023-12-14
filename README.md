@@ -7,7 +7,7 @@ You can configure print density, label size and the tcp server to listen for any
 
 ## New in Version 3.0
 
-The app now emulates Epson ESC/POS. The emulator is based on the [receipt-print-hq/escpos-tools](https://github.com/receipt-print-hq/escpos-tools/blob/master/esc2html.php) repo by @mike42, and can be installed via the binaries/zips on the GitHub Releases page. It currently supports
+The app now emulates Epson ESC/POS. The emulator is based on the [receipt-print-hq/escpos-tools](https://github.com/receipt-print-hq/escpos-tools/blob/master/esc2html.php) repo by [@mike42](https://github.com/mike42), and can be installed via the binaries/zips on the GitHub Releases page. It currently supports
 
 * Windows:
   * Squarrel installer (zpl-escpos-printer-**version**-win32-**arch**-setup.exe)

@@ -26,17 +26,17 @@ const createWindow = () => {
     }
 }
 
-ipcMain.on('select-dirs', async (event, arg) => {
+ipcMain.on('select-dir', async (event, arg) => {
     const result = await dialog.showOpenDialog(win, {
         properties: ['openDirectory']
     })
-    event.sender.send('selected-dirs', result.filePaths)
+    event.sender.send('selected-dir', result.filePaths)
 })
 
 ipcMain.on('select-file', async (event, arg) => {
     const result = await dialog.showOpenDialog(win, {
         properties: ['openFile'],
-        filters: [{ name: 'Raw Print', extensions: ['raw'] }]
+        filters: [{ name: 'Raw Print', extensions: ['raw', 'bin', 'txt', 'print'] }]
     })
     event.sender.send('selected-file', result.filePaths)
 })
