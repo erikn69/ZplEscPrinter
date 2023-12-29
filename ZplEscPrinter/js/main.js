@@ -110,7 +110,7 @@ function notify(text, glyphicon, type, delay) {
     setTimeout(function () { el.fadeOut(1000); }, delay || 2000);
 }
 async function zpl(data){
-    try{ data = atob(data).trim(); }catch(e){}
+    try{ data = atob(data.trim()); }catch(e){}
     const zpls = data.split(/\^XZ|\^xz/);
     const factor = configs.unit === '1' ? 1 : (configs.unit === '2' ? 2.54 : (configs.unit === '3' ? 25.4 : 96.5));
     const width = parseFloat(configs.width) / factor;
@@ -150,7 +150,7 @@ async function zpl(data){
     }
 }
 async function escpos(data){
-    try{ data = atob(data).trim(); }catch(e){}
+    try{ data = atob(data.trim()); }catch(e){}
     try{ data = JSON.parse(JSON.stringify(data).replaceAll(/(\\\\|\/)[u|U]00/g, '\\u00').replaceAll(/\\\\[x|X]/g, '\\x')); }catch(e){}
 
     if (!data || !data.trim().length) {
@@ -251,7 +251,7 @@ function startTcpServer() {
             notify('{0} bytes received from Client: <b>{1}</b> Port: <b>{2}</b>'.format(data.length, clientSocketInfo.peerAddress, clientSocketInfo.peerPort), 'print', 'info', 1000);
 
             const regex = /POST.*\r\n\r\n/gs;
-            const code = String.fromCharCode.apply(null, new Uint8Array(data)).replace(regex,'').trim();
+            const code = String.fromCharCode.apply(null, new Uint8Array(data)).replace(regex,'');
             if (code.includes('Host:') && code.includes('Connection: keep-alive') && code.includes('HTTP')) {
                 console.log('It\'s an ajax call');
                 return;

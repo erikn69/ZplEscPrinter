@@ -28,9 +28,10 @@ The app now runs standalone via Electron.
 ## References
 * [ZPL Command Support](http://labelary.com/docs.html)
 * [ZPL Web Service](http://labelary.com/service.html)
+* [Esc/Pos Commands](https://escpos.readthedocs.io/en/latest/commands.html)
+* [Esc/Pos receipt print tools](https://github.com/receipt-print-hq/escpos-tools)
 * [Electron](https://www.electronjs.org)
 * [Electron Forge](https://www.electronforge.io)
-* [Esc/Pos receipt print tools](https://github.com/receipt-print-hq/escpos-tools)
 
 ## Release notes
 
