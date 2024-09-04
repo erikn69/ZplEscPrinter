@@ -126,14 +126,14 @@ async function zpl(data){
             continue;
         }
 
-        zpl += '^XZ';
+        zpl = zpl.replace(/^\s+/, '') + '^XZ';
 
         let api_url = atob('aHR0cDovL2FwaS5sYWJlbGFyeS5jb20vdjEvcHJpbnRlcnMvezB9ZHBtbS9sYWJlbHMvezF9eHsyfS8wLw==')
             .format(configs.density, width>15.0 ? 15 : width, height);
         let blob = await displayZplImage(api_url, zpl, width, height);
 
         if (![1, '1', true, 'true'].includes(configs.saveLabels)) {
-            return;
+            continue;
         }
 
         console.info("configs", configs.saveLabels, "fileType", configs.filetype);
