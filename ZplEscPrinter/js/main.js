@@ -17,7 +17,7 @@ const defaults = {
     width: '4',
     height: '6',
     unit: '1',
-    host: '127.0.0.1',
+    host: '0.0.0.0',
     port: '9100',
     bufferSize: '4096',
     keepTcpSocket: true,
