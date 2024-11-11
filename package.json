@@ -35,9 +35,7 @@
     "@popperjs/core": "^2.11.8",
     "bootstrap": "^5.3.2",
     "electron-squirrel-startup": "^1.0.0",
-    "electron-store": "^8.1.0",
     "glyphicons-only-bootstrap": "^1.0.1",
-    "jquery": "^3.7.1",
-    "update-electron-app": "^3.0.0"
+    "jquery": "^3.7.1"
   }
 }
