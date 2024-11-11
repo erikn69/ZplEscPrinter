@@ -1,7 +1,7 @@
 {
   "name": "zpl-escpos-printer",
   "productName": "Zpl/EscPos Printer",
-  "version": "3.0.3",
+  "version": "3.0.4",
   "description": "Printer emulator for Zpl/EscPos rendering engine.",
   "main": "main.js",
   "scripts": {
@@ -33,7 +33,6 @@
   },
   "dependencies": {
     "@popperjs/core": "^2.11.8",
-    "bootbox": "^6.0.0",
     "bootstrap": "^5.3.2",
     "electron-squirrel-startup": "^1.0.0",
     "electron-store": "^8.1.0",

@@ -4,7 +4,6 @@ const Bootstrap = global.Bootstrap = require('bootstrap');
 const { ipcRenderer } = require('electron');
 const fs = require('fs');;
 const net = require('net');
-const bootbox = require('bootbox');
 
 let clientSocketInfo;
 let server;
@@ -310,15 +309,20 @@ function initEvents() {
         const size = labels.length;
 
         if (!size) {
+            notify('No labels to remove.', null, 'info');
             return;
         }
 
-        const msg = '{0} {2} {1}'.format(size, size === 1 ? 'label' : 'labels', zplPrinter ? 'zpl' : 'esc/pos')
-        bootbox.confirm('Are you sure to remove {0}?'.format(msg), function (result) {
-            if (result) {
-                labels.remove();
-                notify('{0} successfully removed.'.format(msg), 'trash', 'info');
-            }
+        const msg = '{0} {2} {1}'.format(size, size === 1 ? 'label' : 'labels', zplPrinter ? 'zpl' : 'esc/pos');
+        const btn = $('#btn-modal-confirm-action');
+
+        $('#modal-remove-msg').html(msg);
+        $('#btn-modal-confirm').trigger('click');
+        btn.off("click");
+        btn.on("click", function(e) {
+            btn.prev().trigger('click');
+            labels.remove();
+            notify('{0} successfully removed.'.format(msg), 'trash', 'info');
         });
     });
 
