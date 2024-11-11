@@ -1,10 +1,10 @@
 {
     "manifest_version": 2,
-    "name": "Zpl Printer",
-    "short_name": "Zpl Printer",
+    "name": "Zpl - Esc/Pos Printer",
+    "short_name": "Zpl/Esc Printer",
     "version": "1.6",
     "description": "Printer emulator for zpl rendering engine.",
-    "author": "Simon Binkert",
+    "author": "ErikN",
     "app": {
         "background": {
             "scripts": [ "js/background.js" ],
