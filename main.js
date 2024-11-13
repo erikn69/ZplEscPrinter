@@ -1,10 +1,11 @@
-//const { updateElectronApp, UpdateSourceType } = require('update-electron-app')
-//updateElectronApp()
-
 const { app, BrowserWindow, dialog, ipcMain } = require('electron')
 const path = require("path")
 
 if (require('electron-squirrel-startup')) return app.quit();
+
+const { updateElectronApp, UpdateSourceType } = require('update-electron-app')
+updateElectronApp()
+
 let win
 const createWindow = () => {
     win = new BrowserWindow({

@@ -150,7 +150,7 @@ async function zpl(data){
 }
 async function escpos(data,b64){
     let dataAux = data;
-    try{ dataAux = atob(data.trim()); }catch(e){}
+    try{ dataAux = base64DecodeUnicode(data.trim()); b64=true; }catch(e){}
 
     if (!dataAux || !dataAux.trim().length) {
         console.warn(`esc/pos = '${data}', seems invalid`);
@@ -243,17 +243,18 @@ function startTcpServer() {
 
     server.on('connection', function (sock) {
         console.log('CONNECTED: ' + sock.remoteAddress + ':' + sock.remotePort);
+        sock.setEncoding('utf8');
         clientSocketInfo = {
             peerAddress: sock.remoteAddress,
             peerPort: sock.remotePort
         };
-        sock.write(JSON.stringify({success: true}, 'text/html'));
+        sock.write(JSON.stringify({success: true}));
 
         sock.on('data', async function (data) {
             notify('{0} bytes received from Client: <b>{1}</b> Port: <b>{2}</b>'.format(data.length, clientSocketInfo.peerAddress, clientSocketInfo.peerPort), 'print', 'info', 1000);
             //console.log(String.fromCharCode.apply(null, new Uint8Array(data)));
             const regex = /POST.*\r\n\r\n/gs;
-            const code = String.fromCharCode.apply(null, new Uint8Array(data)).replace(regex,'');
+            const code = (data || '').replace(regex,'');
             if (code.includes('Host:') && code.includes('Connection: keep-alive') && code.includes('HTTP')) {
                 console.log('It\'s an ajax call');
                 return;
