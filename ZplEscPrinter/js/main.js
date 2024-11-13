@@ -27,10 +27,13 @@ const defaults = {
 };
 
 $(function () {
-    $(window).bind('focus blur', function () {
-        $('#panel-head').toggleClass('panel-heading-blur');
+    $(window).bind('focus', function () {
+        $('#panel-head').removeClass('panel-heading-blur');
     });
-
+    $(window).bind('blur', function () {
+        if (document.activeElement && document.activeElement.tagName === 'IFRAME') return;
+        $('#panel-head').addClass('panel-heading-blur');
+    });
     // todo only on first run
     if (!global.localStorage.getItem('isOn')) {
         Object.entries(defaults).forEach(function ([k, v]) {
@@ -248,13 +251,19 @@ function startTcpServer() {
             peerAddress: sock.remoteAddress,
             peerPort: sock.remotePort
         };
-        sock.write(JSON.stringify({success: true}));
 
         sock.on('data', async function (data) {
             notify('{0} bytes received from Client: <b>{1}</b> Port: <b>{2}</b>'.format(data.length, clientSocketInfo.peerAddress, clientSocketInfo.peerPort), 'print', 'info', 1000);
             //console.log(String.fromCharCode.apply(null, new Uint8Array(data)));
             const regex = /POST.*\r\n\r\n/gs;
-            const code = (data || '').replace(regex,'');
+            if (regex.test(data)) {
+                const response = JSON.stringify({success: true});
+                sock.write('HTTP/1.1 200 OK\r\nContent-Type: application/json\r\nContent-Length: ' + Buffer.byteLength(response) + '\r\n\r\n' + response);
+                data = data.replace(regex,'');
+            }
+            sock.end();
+
+            const code = data + '';
             if (code.includes('Host:') && code.includes('Connection: keep-alive') && code.includes('HTTP')) {
                 console.log('It\'s an ajax call');
                 return;
