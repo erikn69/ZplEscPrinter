@@ -112,7 +112,7 @@ function notify(text, glyphicon, type, delay) {
     setTimeout(function () { el.fadeOut(1000); }, delay || 2000);
 }
 async function zpl(data){
-    try{ data = atob(data.trim()); }catch(e){}
+    try{ data = base64DecodeUnicode(data.trim()); }catch(e){}
     const zpls = data.split(/\^XZ|\^xz/);
     const factor = configs.unit === '1' ? 1 : (configs.unit === '2' ? 2.54 : (configs.unit === '3' ? 25.4 : 96.5));
     const width = parseFloat(configs.width) / factor;
