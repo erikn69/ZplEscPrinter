@@ -157,6 +157,22 @@ async function zpl(data){
 const escposStatusCommand = `\u0010\u0004\x01`;
 
 /**
+ * @returns {number[]} - The status byte for the escpos printer
+ */
+function getEscposStatus() {
+    let returnBytes = [0x00];
+    if (![1, '1', true, 'true'].includes(configs.escposOnline)) {
+        // Bit 3 set indicates that the printer is offline
+        returnBytes[0] |= 0b00001000;
+    }
+    if ([1, '1', true, 'true'].includes(configs.escposPaperFeedPressed)) {
+        // Bit 6 set indicates that the paper feed button is pressed
+        returnBytes[0] |= 0b01000000;
+    }
+    return returnBytes
+}
+
+/**
  * 
  * @param {string} data - The incoming socket data from the client
  * @param {boolean} b64 - If true, data is base64 encoded
@@ -168,7 +184,7 @@ async function escpos(data,b64){
 
     if (dataAux === escposStatusCommand) {
         // This returns the everything okay status
-        return Buffer.from([0b00001000]);
+        return Buffer.from(getEscposStatus());
     }
 
     if (!dataAux || !dataAux.trim().length) {
