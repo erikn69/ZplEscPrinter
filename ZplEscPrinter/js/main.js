@@ -151,9 +151,23 @@ async function zpl(data){
         }
     }
 }
+
+const escposStatusCommand = `\u0010\u0004\x01`;
+
+/**
+ * 
+ * @param {string} data - The incoming socket data from the client
+ * @param {boolean} b64 - If true, data is base64 encoded
+ * @returns {Promise<Buffer<ArrayBufferLike> | null>} - The response to send back to the client
+ */
 async function escpos(data,b64){
     let dataAux = data;
     try{ dataAux = base64DecodeUnicode(data.trim()); b64=true; }catch(e){}
+
+    if (dataAux === escposStatusCommand) {
+        // This returns the everything okay status
+        return Buffer.from([0b00001000]);
+    }
 
     if (!dataAux || !dataAux.trim().length) {
         console.warn(`esc/pos = '${data}', seems invalid`);
@@ -183,6 +197,8 @@ async function escpos(data,b64){
     if ([1, '1', true, 'true'].includes(configs.saveLabels)) {
         await saveLabel(data, "raw", getCounter());
     }
+
+    return null
 }
 async function displayEscPosLabel (data){
     let frame = $('<iframe class="label-esc w-100"></iframe>');
@@ -261,11 +277,11 @@ function startTcpServer() {
                 sock.write('HTTP/1.1 200 OK\r\nContent-Type: application/json\r\nContent-Length: ' + Buffer.byteLength(response) + '\r\n\r\n' + response);
                 data = data.replace(regex,'');
             }
-            sock.end();
 
             const code = data + '';
             if (code.includes('Host:') && code.includes('Connection: keep-alive') && code.includes('HTTP')) {
                 console.log('It\'s an ajax call');
+                sock.end();
                 return;
             }
 
@@ -277,12 +293,14 @@ function startTcpServer() {
                 if ($('#isZpl').is(':checked')) {
                     zpl(code);
                 } else {
-                    escpos(code);
+                    const response = await escpos(code);
+                    if (response) sock.write(response);
                 }
             }catch(err){
                 console.error(err);
                 notify('ERROR: {0}'.format(err.message), 'print', 'danger', 0)
             }
+            sock.end();
         });
 
     });
