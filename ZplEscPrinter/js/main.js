@@ -23,7 +23,9 @@ const defaults = {
     saveLabels: false,
     filetype: '3',
     path: null,
-    counter: 0
+    counter: 0,
+    escposOnline: true,
+    escposPaperFeedPressed: false,
 };
 
 $(function () {
@@ -151,9 +153,39 @@ async function zpl(data){
         }
     }
 }
+
+const escposStatusCommand = `\u0010\u0004\x01`;
+
+/**
+ * @returns {number[]} - The status byte for the escpos printer
+ */
+function getEscposStatus() {
+    let returnBytes = [0x00];
+    if (![1, '1', true, 'true'].includes(configs.escposOnline)) {
+        // Bit 3 set indicates that the printer is offline
+        returnBytes[0] |= 0b00001000;
+    }
+    if ([1, '1', true, 'true'].includes(configs.escposPaperFeedPressed)) {
+        // Bit 6 set indicates that the paper feed button is pressed
+        returnBytes[0] |= 0b01000000;
+    }
+    return returnBytes
+}
+
+/**
+ * 
+ * @param {string} data - The incoming socket data from the client
+ * @param {boolean} b64 - If true, data is base64 encoded
+ * @returns {Promise<Buffer<ArrayBufferLike> | null>} - The response to send back to the client
+ */
 async function escpos(data,b64){
     let dataAux = data;
     try{ dataAux = base64DecodeUnicode(data.trim()); b64=true; }catch(e){}
+
+    if (dataAux === escposStatusCommand) {
+        // This returns the everything okay status
+        return Buffer.from(getEscposStatus());
+    }
 
     if (!dataAux || !dataAux.trim().length) {
         console.warn(`esc/pos = '${data}', seems invalid`);
@@ -183,6 +215,8 @@ async function escpos(data,b64){
     if ([1, '1', true, 'true'].includes(configs.saveLabels)) {
         await saveLabel(data, "raw", getCounter());
     }
+
+    return null
 }
 async function displayEscPosLabel (data){
     let frame = $('<iframe class="label-esc w-100"></iframe>');
@@ -263,11 +297,11 @@ function startTcpServer() {
             } else {
                 sock.write(Buffer.from("0x0"));
             }
-            sock.end();
 
             const code = data + '';
             if (code.includes('Host:') && code.includes('Connection: keep-alive') && code.includes('HTTP')) {
                 console.log('It\'s an ajax call');
+                sock.end();
                 return;
             }
 
@@ -279,12 +313,14 @@ function startTcpServer() {
                 if ($('#isZpl').is(':checked')) {
                     zpl(code);
                 } else {
-                    escpos(code);
+                    const response = await escpos(code);
+                    if (response) sock.write(response);
                 }
             }catch(err){
                 console.error(err);
                 notify('ERROR: {0}'.format(err.message), 'print', 'danger', 0)
             }
+            sock.end();
         });
 
     });
