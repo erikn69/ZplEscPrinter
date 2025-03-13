@@ -23,7 +23,9 @@ const defaults = {
     saveLabels: false,
     filetype: '3',
     path: null,
-    counter: 0
+    counter: 0,
+    escposOnline: true,
+    escposPaperFeedPressed: false,
 };
 
 $(function () {
