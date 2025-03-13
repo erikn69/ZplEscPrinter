@@ -9,7 +9,7 @@ updateElectronApp()
 let win
 const createWindow = () => {
     win = new BrowserWindow({
-        width: process.env.NODE_ENV === "development" ? 785 : 535,
+        width: process.env.NODE_ENV === "development" ? 895 : 535,
         height: 765,
         frame: false,
         resizable: true,
