@@ -35,3 +35,13 @@ input[type=checkbox]._big, input[type=radio]._big, ._big>input[type=checkbox], .
     margin-top: 5px;
     margin-right: 10px;
 }
+
+.escpos-fields {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+}
+
+.escpos-fields > .input-group > span {
+    width: 100%;
+}
