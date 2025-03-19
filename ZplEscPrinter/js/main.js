@@ -5,9 +5,13 @@ const { ipcRenderer } = require('electron');
 const fs = require('fs');;
 const net = require('net');
 
+const EscposCommands = require('./commands');
+
+
 let clientSocketInfo;
 let server;
 let configs = {};
+const escposCommands = new EscposCommands(configs);
 
 const defaults = {
     isZpl: true,
@@ -26,6 +30,9 @@ const defaults = {
     counter: 0,
     escposOnline: true,
     escposPaperFeedPressed: false,
+    escposCoverOpen: false,
+    escposPaperBeingFed: false,
+    escposPaperEnd: false,
 };
 
 $(function () {
@@ -154,24 +161,6 @@ async function zpl(data){
     }
 }
 
-const escposStatusCommand = `\u0010\u0004\x01`;
-
-/**
- * @returns {number[]} - The status byte for the escpos printer
- */
-function getEscposStatus() {
-    let returnBytes = [0x00];
-    if (![1, '1', true, 'true'].includes(configs.escposOnline)) {
-        // Bit 3 set indicates that the printer is offline
-        returnBytes[0] |= 0b00001000;
-    }
-    if ([1, '1', true, 'true'].includes(configs.escposPaperFeedPressed)) {
-        // Bit 6 set indicates that the paper feed button is pressed
-        returnBytes[0] |= 0b01000000;
-    }
-    return returnBytes
-}
-
 /**
  * 
  * @param {string} data - The incoming socket data from the client
@@ -182,10 +171,14 @@ async function escpos(data,b64){
     let dataAux = data;
     try{ dataAux = base64DecodeUnicode(data.trim()); b64=true; }catch(e){}
 
-    if (dataAux === escposStatusCommand) {
+    if (dataAux === escposCommands.getStatusCommand) {
         // This returns the everything okay status
-        return Buffer.from(getEscposStatus());
+        return Buffer.from(escposCommands.getEscposStatus());
+    } else if (dataAux === escposCommands.getOfflineCauseCommand()) {
+        return Buffer.from(escposCommands.getOfflineCause())
     }
+
+    
 
     if (!dataAux || !dataAux.trim().length) {
         console.warn(`esc/pos = '${data}', seems invalid`);
