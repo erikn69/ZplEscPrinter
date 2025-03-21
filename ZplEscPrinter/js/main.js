@@ -174,7 +174,7 @@ async function escpos(data,b64){
     if (dataAux === escposCommands.getStatusCommand) {
         // This returns the everything okay status
         return Buffer.from(escposCommands.getEscposStatus());
-    } else if (dataAux === escposCommands.getOfflineCauseCommand()) {
+    } else if (dataAux === escposCommands.getOfflineCauseCommand) {
         return Buffer.from(escposCommands.getOfflineCause())
     }
 
