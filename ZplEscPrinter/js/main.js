@@ -33,6 +33,7 @@ const defaults = {
     escposCoverOpen: false,
     escposPaperBeingFed: false,
     escposPaperEnd: false,
+    escposErrorOccurred: false,
 };
 
 $(function () {
