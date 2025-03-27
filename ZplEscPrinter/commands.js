@@ -2,6 +2,8 @@ class EscposCommands {
   constructor(configs) {
     this.getStatusCommand = "\u0010\u0004\x01";
     this.getOfflineCauseCommand = "\u0010\u0004\x02";
+    this.getErrorCauseCommand = "\u0010\u0004\x03";
+    this.getRollPaperStatusCommand = "\u0010\u0004\x04";
     this.configs = configs;
   }
 
@@ -42,6 +44,39 @@ class EscposCommands {
     if ([1, "1", true, "true"].includes(configs.escposErrorOccurred)) {
       // Bit 6 set indicates that an error has occurred
       returnBytes[0] |= 0b01000000;
+    }
+  }
+
+  getErrorCause() {
+    let returnBytes = [0x00];
+
+    if ([1, "1", true, "true"].includes(configs.escposRecoverableError)) {
+      // Bit 2 set indicates that a recoverable error has occurred
+      returnBytes[0] |= 0b00000100;
+    }
+
+    if ([1, "1", true, "true"].includes(configs.escposCutterError)) {
+      // Bit 3 set indicates that an auto cutter error has occurred
+      returnBytes[0] |= 0b00001000;
+    }
+
+    if ([1, "1", true, "true"].includes(configs.escposUnrecoverableError)) {
+      // Bit 5 set indicates that an unrecoverable error has occurred
+      returnBytes[0] |= 0b00100000;
+    }
+
+    if ([1, "1", true, "true"].includes(configs.escposAutoRecoverableError)) {
+      // Bit 6 set indicates that an auto recoverable error has occurred
+      returnBytes[0] |= 0b01000000;
+    }
+  }
+
+  getRollPaperStatus() {
+    let returnBytes = [0x00];
+
+    if ([1, "1", true, "true"].includes(configs.escposPaperLow)) {
+      // Bit 6 set indicates that the paper is low
+      returnBytes[0] |= 0b00001100;
     }
   }
 }

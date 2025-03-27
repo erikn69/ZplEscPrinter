@@ -34,6 +34,11 @@ const defaults = {
     escposPaperBeingFed: false,
     escposPaperEnd: false,
     escposErrorOccurred: false,
+    escposRecoverableError: false,
+    escposCutterError: false,
+    escposUnrecoverableError: false,
+    escposAutoRecoverableError: false,
+    escposPaperLow: false,
 };
 
 $(function () {
@@ -177,10 +182,13 @@ async function escpos(data,b64){
         return Buffer.from(escposCommands.getEscposStatus());
     } else if (dataAux === escposCommands.getOfflineCauseCommand) {
         return Buffer.from(escposCommands.getOfflineCause())
+    } else if (dataAux === escposCommands.getErrorCauseCommand) {
+        return Buffer.from(escposCommands.getErrorCause())
+    } else if (dataAux === escposCommands.getRollPaperStatusCommand) {
+        return Buffer.from(escposCommands.getRollPaperStatus())
     }
 
     
-
     if (!dataAux || !dataAux.trim().length) {
         console.warn(`esc/pos = '${data}', seems invalid`);
         return;
