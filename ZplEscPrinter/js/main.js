@@ -178,7 +178,6 @@ async function escpos(data,b64){
     try{ dataAux = base64DecodeUnicode(data.trim()); b64=true; }catch(e){}
 
     if (dataAux === escposCommands.getStatusCommand) {
-        // This returns the everything okay status
         return Buffer.from(escposCommands.getEscposStatus());
     } else if (dataAux === escposCommands.getOfflineCauseCommand) {
         return Buffer.from(escposCommands.getOfflineCause())
@@ -320,7 +319,6 @@ function startTcpServer() {
                 console.error(err);
                 notify('ERROR: {0}'.format(err.message), 'print', 'danger', 0)
             }
-            sock.end();
         });
 
     });
