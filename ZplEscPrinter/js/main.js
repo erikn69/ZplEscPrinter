@@ -5,9 +5,13 @@ const { ipcRenderer } = require('electron');
 const fs = require('fs');;
 const net = require('net');
 
+const EscposCommands = require('./commands');
+
+
 let clientSocketInfo;
 let server;
 let configs = {};
+const escposCommands = new EscposCommands(configs);
 
 const defaults = {
     isZpl: true,
@@ -23,7 +27,18 @@ const defaults = {
     saveLabels: false,
     filetype: '3',
     path: null,
-    counter: 0
+    counter: 0,
+    escposOnline: true,
+    escposPaperFeedPressed: false,
+    escposCoverOpen: false,
+    escposPaperBeingFed: false,
+    escposPaperEnd: false,
+    escposErrorOccurred: false,
+    escposRecoverableError: false,
+    escposCutterError: false,
+    escposUnrecoverableError: false,
+    escposAutoRecoverableError: false,
+    escposPaperLow: false,
 };
 
 $(function () {
@@ -151,10 +166,28 @@ async function zpl(data){
         }
     }
 }
+
+/**
+ * 
+ * @param {string} data - The incoming socket data from the client
+ * @param {boolean} b64 - If true, data is base64 encoded
+ * @returns {Promise<Buffer<ArrayBufferLike> | null>} - The response to send back to the client
+ */
 async function escpos(data,b64){
     let dataAux = data;
     try{ dataAux = base64DecodeUnicode(data.trim()); b64=true; }catch(e){}
 
+    if (dataAux === escposCommands.getStatusCommand) {
+        return Buffer.from(escposCommands.getEscposStatus());
+    } else if (dataAux === escposCommands.getOfflineCauseCommand) {
+        return Buffer.from(escposCommands.getOfflineCause())
+    } else if (dataAux === escposCommands.getErrorCauseCommand) {
+        return Buffer.from(escposCommands.getErrorCause())
+    } else if (dataAux === escposCommands.getRollPaperStatusCommand) {
+        return Buffer.from(escposCommands.getRollPaperStatus())
+    }
+
+    
     if (!dataAux || !dataAux.trim().length) {
         console.warn(`esc/pos = '${data}', seems invalid`);
         return;
@@ -183,6 +216,8 @@ async function escpos(data,b64){
     if ([1, '1', true, 'true'].includes(configs.saveLabels)) {
         await saveLabel(data, "raw", getCounter());
     }
+
+    return null
 }
 async function displayEscPosLabel (data){
     let frame = $('<iframe class="label-esc w-100"></iframe>');
@@ -260,14 +295,12 @@ function startTcpServer() {
                 const response = JSON.stringify({success: true});
                 sock.write('HTTP/1.1 200 OK\r\nContent-Type: application/json\r\nContent-Length: ' + Buffer.byteLength(response) + '\r\n\r\n' + response);
                 data = data.replace(regex,'');
-            } else {
-                sock.write(Buffer.from("0x0"));
             }
-            sock.end();
 
             const code = data + '';
             if (code.includes('Host:') && code.includes('Connection: keep-alive') && code.includes('HTTP')) {
                 console.log('It\'s an ajax call');
+                sock.end();
                 return;
             }
 
@@ -279,7 +312,8 @@ function startTcpServer() {
                 if ($('#isZpl').is(':checked')) {
                     zpl(code);
                 } else {
-                    escpos(code);
+                    const response = await escpos(code);
+                    if (response) sock.write(response);
                 }
             }catch(err){
                 console.error(err);
