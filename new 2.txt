@@ -1,0 +1,17 @@
+/u001B@/u001B!/u0000/u001BM/u0000/u001D!/u0000/u001BE/u0001NUM:  --                /u001BE/u0000                        
+/u001BE/u0001MESA:/u001BE/u0000 Mesa 2
+/u001BE/u0001RESP:/u001BE/u0000 Administrador/u001BE/u0001
+  CANT.  DETALLE/u001BE/u0000
+------------------------------------------------
+
+/u001BE/u0001->    1/u001BE/u0000  Formula 1
+
+/u001BE/u0001->    1/u001BE/u0000  Formula 1
+/u001BE/u0001 -  /u001B/u002D1SIN/u001B/u002D0/u001BE/u0000 Materia Prima 2
+/u001BE/u0001 -  /u001B/u002D1SIN/u001B/u002D0/u001BE/u0000 Materia Prima 3
+/u001BE/u0001       *PARA LLEVAR - Esta es una nota/u001BE/u0000
+/u001BE/u0001 +    1/u001BE/u0000  Formula 2
+/u001BE/u0001       Mas salsas/u001BE/u0000
+
+
+/u001D!/u0000/u001DVA/u0003
