@@ -5,9 +5,6 @@ const { ipcRenderer } = require('electron');
 const fs = require('fs');;
 const net = require('net');
 
-const EscposCommands = require('./commands');
-
-
 let clientSocketInfo;
 let server;
 let configs = {};
@@ -168,7 +165,7 @@ async function zpl(data){
 }
 
 /**
- * 
+ *
  * @param {string} data - The incoming socket data from the client
  * @param {boolean} b64 - If true, data is base64 encoded
  * @returns {Promise<Buffer<ArrayBufferLike> | null>} - The response to send back to the client
@@ -187,7 +184,7 @@ async function escpos(data,b64){
         return Buffer.from(escposCommands.getRollPaperStatus())
     }
 
-    
+
     if (!dataAux || !dataAux.trim().length) {
         console.warn(`esc/pos = '${data}', seems invalid`);
         return;
@@ -294,13 +291,19 @@ function startTcpServer() {
             if (regex.test(data)) {
                 const response = JSON.stringify({success: true});
                 sock.write('HTTP/1.1 200 OK\r\nContent-Type: application/json\r\nContent-Length: ' + Buffer.byteLength(response) + '\r\n\r\n' + response);
+                sock.end();
                 data = data.replace(regex,'');
             }
 
             const code = data + '';
             if (code.includes('Host:') && code.includes('Connection: keep-alive') && code.includes('HTTP')) {
-                console.log('It\'s an ajax call');
-                sock.end();
+                const responseErrorMsg = 'Ajax call could not be handled!',
+                    responseError = JSON.stringify({success: false, message: responseErrorMsg});
+                notify(responseErrorMsg, 'remove', 'danger', 0);
+                try {
+                    sock.write('HTTP/1.1 500 Internal Server Error\r\nContent-Type: application/json\r\nContent-Length: ' + Buffer.byteLength(responseError) + '\r\n\r\n' + responseError);
+                    sock.end();
+                } catch (error) {}
                 return;
             }
 
