@@ -211,7 +211,7 @@ async function escpos(data,b64){
     }
 
     if ([1, '1', true, 'true'].includes(configs.saveLabels)) {
-        await saveLabel(data, "raw", getCounter());
+        await saveLabel(b64 ? base64DecodeUnicode(data) : data, "raw", getCounter());
     }
 
     return null
