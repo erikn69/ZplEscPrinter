@@ -77,7 +77,7 @@ async function saveLabel(blob, ext, counter) {
     const path = !configs.path || configs.path==='null' ? '' : configs.path.trimCharEnd('\\').trimCharEnd('/');
 
     try {
-        fs.writeFileSync(path + '/' + fileName, typeof blob === 'string' ? blob : new Uint8Array(await blob.arrayBuffer()))
+        fs.writeFileSync(path + '/' + fileName, typeof blob === 'string' ? blob : ( Buffer.isBuffer(blob) ? blob : new Uint8Array(await blob.arrayBuffer())))
         // file written successfully
         notify('Label <b>{0}</b> saved in folder <b>{1}</b>'.format(fileName, path), 'floppy-saved', 'info', 1000);
     } catch (err) {
@@ -124,6 +124,7 @@ function notify(text, glyphicon, type, delay) {
     setTimeout(function () { el.fadeOut(1000); }, delay || 2000);
 }
 async function zpl(data){
+    data = data.toString('utf8');
     try{ data = base64DecodeUnicode(data.trim()); }catch(e){}
     const zpls = data.split(/\^XZ|\^xz/);
     const factor = configs.unit === '1' ? 1 : (configs.unit === '2' ? 2.54 : (configs.unit === '3' ? 25.4 : 96.5));
@@ -171,8 +172,8 @@ async function zpl(data){
  * @returns {Promise<Buffer<ArrayBufferLike> | null>} - The response to send back to the client
  */
 async function escpos(data,b64){
-    let dataAux = data;
-    try{ dataAux = base64DecodeUnicode(data.trim()); b64=true; }catch(e){}
+    let dataAux = data.toString('utf8');
+    try{ dataAux = base64DecodeUnicode(dataAux.trim()); b64=true; }catch(e){}
 
     if (dataAux === escposCommands.getStatusCommand) {
         return Buffer.from(escposCommands.getEscposStatus());
@@ -184,16 +185,16 @@ async function escpos(data,b64){
         return Buffer.from(escposCommands.getRollPaperStatus())
     }
 
+    //console.log(dataAux);
+    if (dataAux.trim() === "\u001B@" || dataAux.replace("\u001B@", '').trim() === "\u001B\u0064\u0001") {
+        return; // control commands
+    }
 
     if (!dataAux || !dataAux.trim().length) {
         console.warn(`esc/pos = '${data}', seems invalid`);
         return;
     }
 
-    const factor = configs.unit === '4' ? 1 : (configs.unit === '3' ? 379.921465 : (configs.unit === '2' ? 37.9921465 : 96.5));
-    const width = Math.round(parseFloat(configs.width) * factor * 1000) / 1000;
-
-    //console.log(dataAux);
     dataAux = dataAux.replace("\u001B@", '').trim();
     if (!dataAux) { //empty
         await displayEscPosLabel(btoa('<html style="background-color:#f8f8f8;"><head></head><body style="background-color:white;border:1px #dee2e6 solid;"><div style="text-align:center;"><b>--- EMPTY / NO DATA ---</b><br/><br/><div style="width:100px;display:block;margin-left:auto;margin-right:auto;"><svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 115.19 123.38" style="enable-background:new 0 0 115.19 123.38" xml:space="preserve"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;stroke:#000000;stroke-width:0.5;stroke-miterlimit:2.6131;}</style><g><path class="st0" d="M93.13,79.5c12.05,0,21.82,9.77,21.82,21.82c0,12.05-9.77,21.82-21.82,21.82c-12.05,0-21.82-9.77-21.82-21.82 C71.31,89.27,81.08,79.5,93.13,79.5L93.13,79.5z M8.08,0.25h95.28c2.17,0,4.11,0.89,5.53,2.3c1.42,1.42,2.3,3.39,2.3,5.53v70.01 c-2.46-1.91-5.24-3.44-8.25-4.48V9.98c0-0.43-0.16-0.79-0.46-1.05c-0.26-0.26-0.66-0.46-1.05-0.46H9.94 c-0.43,0-0.79,0.16-1.05,0.46C8.63,9.19,8.43,9.58,8.43,9.98v70.02h0.03l31.97-30.61c1.28-1.18,3.29-1.05,4.44,0.23 c0.03,0.03,0.03,0.07,0.07,0.07l26.88,31.8c-4.73,5.18-7.62,12.08-7.62,19.65c0,3.29,0.55,6.45,1.55,9.4H8.08 c-2.17,0-4.11-0.89-5.53-2.3s-2.3-3.39-2.3-5.53V8.08c0-2.17,0.89-4.11,2.3-5.53S5.94,0.25,8.08,0.25L8.08,0.25z M73.98,79.35 l3.71-22.79c0.3-1.71,1.91-2.9,3.62-2.6c0.66,0.1,1.25,0.43,1.71,0.86l17.1,17.97c-2.18-0.52-4.44-0.79-6.78-0.79 C85.91,71.99,79.13,74.77,73.98,79.35L73.98,79.35z M81.98,18.19c3.13,0,5.99,1.28,8.03,3.32c2.07,2.07,3.32,4.9,3.32,8.03 c0,3.13-1.28,5.99-3.32,8.03c-2.07,2.07-4.9,3.32-8.03,3.32c-3.13,0-5.99-1.28-8.03-3.32c-2.07-2.07-3.32-4.9-3.32-8.03 c0-3.13,1.28-5.99,3.32-8.03C76.02,19.44,78.86,18.19,81.98,18.19L81.98,18.19z M85.82,88.05l19.96,21.6 c1.58-2.39,2.5-5.25,2.5-8.33c0-8.36-6.78-15.14-15.14-15.14C90.48,86.17,87.99,86.85,85.82,88.05L85.82,88.05z M100.44,114.58 l-19.96-21.6c-1.58,2.39-2.5,5.25-2.5,8.33c0,8.36,6.78,15.14,15.14,15.14C95.78,116.46,98.27,115.78,100.44,114.58L100.44,114.58z"/></g></svg></div></body><html>'));
@@ -202,16 +203,19 @@ async function escpos(data,b64){
     } else if(dataAux.length<=4&&(dataAux.startsWith("\u001DV")||dataAux.startsWith("\u001De")||dataAux.startsWith("\u001Bi"))) { //cut-paper
         await displayEscPosLabel(btoa('<html style="background-color:#f8f8f8;"><head></head><body style="background-color:white;border:1px #dee2e6 solid;"><div style="text-align:center;"><b>-------- PAPER CUT --------</b><br/><br/><div style="width:100px;display:block;margin-left:auto;margin-right:auto;"><svg xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" version="1.1" width="100" height="60" id="svg2"> <defs id="defs4"> <marker refX="0" refY="0" orient="auto" id="Scissors" style="overflow:visible"> <path d="M 9.0898857,-3.6061018 C 8.1198849,-4.7769976 6.3697607,-4.7358294 5.0623558,-4.2327734 l -8.2124046,3.0779029 c -2.3882933,-1.3067135 -4.7482873,-0.9325372 -4.7482873,-1.5687873 0,-0.4973164 0.4566662,-0.3883222 0.3883068,-1.6831941 -0.065635,-1.2432767 -1.3635771,-2.1630796 -2.5903987,-2.0816435 -1.227271,-0.00735 -2.499439,0.9331613 -2.510341,2.2300611 -0.09143,1.3063864 1.007209,2.5196896 2.306764,2.6052316 1.5223406,0.2266616 4.218258,-0.6955566 5.482945,1.57086006 -0.9422847,1.73825774 -2.6140244,1.74307674 -4.1255107,1.65607034 -1.2548743,-0.072235 -2.7620933,0.2873979 -3.3606483,1.5208605 -0.578367,1.1820862 -0.0112,2.8646022 1.316749,3.226412 1.3401912,0.4918277 3.1806689,-0.129711 3.4993722,-1.6707242 0.2456585,-1.187823 -0.5953659,-1.7459574 -0.2725074,-2.1771537 0.2436135,-0.32536 1.7907806,-0.1368452 4.5471053,-1.3748244 L 5.6763468,4.2330688 C 6.8000164,4.5467672 8.1730685,4.5362646 9.1684433,3.4313614 L -0.05164093,-0.05372222 9.0898857,-3.6061018 z m -18.3078016,-1.900504 c 1.294559,0.7227998 1.1888392,2.6835702 -0.1564272,3.0632889 -1.2165179,0.423661 -2.7710269,-0.7589694 -2.3831779,-2.0774648 0.227148,-1.0818519 1.653387,-1.480632 2.5396051,-0.9858241 z m 0.056264,8.0173649 c 1.3508301,0.4988648 1.1214429,2.7844356 -0.2522207,3.091609 -0.9110594,0.3163391 -2.2135494,-0.1387976 -2.3056964,-1.2121394 -0.177609,-1.305055 1.356085,-2.4841482 2.5579171,-1.8794696 z" id="schere" style="marker-start:none" /> </marker> </defs> <g transform="translate(0,-992.36218)" id="layer1"> <g transform="matrix(4.2610846,-1.2351263,1.2351263,4.2610846,-1337.7659,-2994.9736)" id="g4593"> <path d="m 59.731665,956.40057 c -0.609784,-1.39286 -2.303491,-1.83556 -3.698902,-1.71226 l -8.742604,0.69566 c -1.935736,-1.91425 -4.307466,-2.2049 -4.132136,-2.81651 0.137044,-0.47806 0.545993,-0.24745 0.837105,-1.51102 0.279511,-1.21323 -0.714709,-2.45509 -1.916471,-2.71488 -1.177727,-0.34526 -2.659814,0.20827 -3.027677,1.45195 -0.447882,1.23061 0.273869,2.69969 1.499535,3.14003 1.400938,0.6374 4.246607,0.49379 4.837778,3.02096 -1.384807,1.41129 -2.993148,0.95525 -4.422137,0.4551 -1.186382,-0.41524 -2.734347,-0.48487 -3.649629,0.53589 -0.881717,0.97694 -0.800158,2.7506 0.376675,3.46434 1.15277,0.8421 3.093263,0.7518 3.824279,-0.64172 0.563472,-1.07414 -0.09119,-1.84242 0.337995,-2.16796 0.32384,-0.24563 1.759155,0.36194 4.749906,-0.0686 l 7.684693,5.46398 c 0.993719,0.61119 2.316503,0.97947 3.577814,0.19164 l -7.902726,-5.8909 9.766502,-0.89574 z m -17.075242,-6.87194 c 1.045256,1.05155 0.403306,2.90727 -0.994512,2.90157 -1.286163,0.072 -2.454591,-1.49318 -1.718425,-2.65375 0.516476,-0.97737 1.997384,-0.96769 2.712937,-0.24782 z m -2.155235,7.72245 c 1.161058,0.85179 0.310724,2.98566 -1.0944,2.9024 -0.962958,0.053 -2.089598,-0.7434 -1.882399,-1.80058 0.188897,-1.30347 1.988129,-2.01427 2.976799,-1.10182 z" id="path4599" style="marker-start:none"/></g></g></svg></div></body><html>'));
     } else {
+        //if(!b64) console.log('not seems base64', data.toString('utf8'))
+        const factor = configs.unit === '3' ? 1 : (configs.unit === '2' ? 10 : (configs.unit === '1' ? 25.4 : (80/333)));
+        const width = ((Math.round(parseFloat(configs.width) * factor * 1000) / 1000) + 5) + 'mm';
         await $.post(atob('aHR0cHM6Ly90ZXN0LnJ1Ynlrcy5jb20vZXNjcG9zL2Jhc2U2NGh0bWwucGhw'), {
-            esc: b64 ? data : base64EncodeUnicode(dataAux), width: width
+            esc: b64 ? data : data.toString('base64'), width: width
         }).done(function (response) {
             //console.log('Data Loaded: ' + response);
             displayEscPosLabel(response)
         });
-    }
 
-    if ([1, '1', true, 'true'].includes(configs.saveLabels)) {
-        await saveLabel(b64 ? base64DecodeUnicode(data) : data, "raw", getCounter());
+        if ([1, '1', true, 'true'].includes(configs.saveLabels)) {
+            await saveLabel(b64 ? base64DecodeUnicode(data) : data, "raw", getCounter());
+        }
     }
 
     return null
@@ -278,25 +282,26 @@ function startTcpServer() {
 
     server.on('connection', function (sock) {
         console.log('CONNECTED: ' + sock.remoteAddress + ':' + sock.remotePort);
-        sock.setEncoding('utf8');
+        //sock.setEncoding('utf8');
         clientSocketInfo = {
             peerAddress: sock.remoteAddress,
             peerPort: sock.remotePort
         };
 
         sock.on('data', async function (data) {
-            notify('{0} bytes received from Client: <b>{1}</b> Port: <b>{2}</b>'.format(data.length, clientSocketInfo.peerAddress, clientSocketInfo.peerPort), 'print', 'info', 1000);
-            //console.log(String.fromCharCode.apply(null, new Uint8Array(data)));
+            notify(`${data.length} bytes received from Client: <b>${sock.remoteAddress}</b> Port: <b>${sock.remotePort}</b>`, 'print', 'info', 1000);
+            let textView = data.toString('utf8');//console.log(textView);
+
             const regex = /POST.*\r\n\r\n/gs;
-            if (regex.test(data)) {
+            if (regex.test(textView)) {
                 const response = JSON.stringify({success: true});
                 sock.write('HTTP/1.1 200 OK\r\nContent-Type: application/json\r\nContent-Length: ' + Buffer.byteLength(response) + '\r\n\r\n' + response);
                 sock.end();
-                data = data.replace(regex,'');
+                data = Buffer.from(textView.replace(regex,''), 'utf8');
             }
 
-            const code = data + '';
-            if (code.includes('Host:') && code.includes('Connection: keep-alive') && code.includes('HTTP')) {
+            const code = data;
+            if (textView.includes('Host:') && textView.includes('Connection: keep-alive') && textView.includes('HTTP')) {
                 const responseErrorMsg = 'Ajax call could not be handled!',
                     responseError = JSON.stringify({success: false, message: responseErrorMsg});
                 notify(responseErrorMsg, 'remove', 'danger', 0);
@@ -320,7 +325,7 @@ function startTcpServer() {
                 }
             }catch(err){
                 console.error(err);
-                notify('ERROR: {0}'.format(err.message), 'print', 'danger', 0)
+                notify('ERROR: {0}'.format(err.message), 'print', 'danger', 0);
             }
         });
 
