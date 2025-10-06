@@ -36,7 +36,23 @@ input[type=checkbox]._big, input[type=radio]._big, ._big>input[type=checkbox], .
     margin-right: 10px;
 }
 
-.escpos-col > div > div > span {
+.escpos-col {
+    padding-right: 5px;
+    padding-left: 0;
+}
+.escpos-col > .col {
+    margin-right: 0;
+    padding-right: 0;
+    margin-bottom: 2px;
+    padding-left: 6px;
+}
+.escpos-col > .col label {
+    font-size: 11px;
+    line-height: 2.1;
+    font-weight: bold;
+    margin-left: -5px;
+}
+.escpos-col > .col > div > span {
     width: 100%;
-    padding: 0.1rem 0.5rem;
+    padding: 0.1rem 0.3rem;
 }

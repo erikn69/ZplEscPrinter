@@ -94,7 +94,7 @@
                 </div>
                 <form id="configsForm" class="mb-0">
                     <div class="modal-body ps-2 pe-2 pt-1">
-                        <fieldset class="border rounded p-2 mb-1">
+                        <fieldset class="border rounded p-2">
                             <legend class="float-none w-auto px-2 mb-0 fs-6 fw-semibold">Printer Properties</legend>
                             <div class="row mb-2 is-zpl">
                                 <div class="col-7">
@@ -129,7 +129,7 @@
                                 </div>
                             </div>
                         </fieldset>
-                        <fieldset class="border rounded p-2 mb-1">
+                        <fieldset class="border rounded p-2">
                             <legend class="float-none w-auto px-2 mb-0 fs-6 fw-semibold">Network</legend>
                             <div class="input-group mb-2">
                                 <div class="form-floating">
@@ -160,7 +160,7 @@
                                 </span>
                             </div>
                         </fieldset>
-                        <fieldset class="border rounded p-2 mb-1">
+                        <fieldset class="border rounded p-2">
                             <legend class="float-none w-auto px-2 mb-0 fs-6 fw-semibold">Storage</legend>
                             <div class="row mb-2">
                                 <div class="col-8">
@@ -196,119 +196,117 @@
                                 <button id="btn-path" type="button" class="btn btn-secondary">Choose</button>
                             </div>
                         </fieldset>
-                        <fieldset class="border rounded p-2 mb-1 is-esc">
+                        <fieldset class="border rounded p-2 is-esc">
                             <legend class="float-none w-auto px-2 mb-0 fs-6 fw-semibold">ESC/POS Status</legend>
-                            <div class="container">
-                                <div class="row row-cols-2 escpos-col row-gap-1">
-                                    <div class="col">
-                                        <div class="input-group">
-                                            <span class="input-group-text">
-                                                <div class="form-check">
-                                                    <input id="escposOnline" type="checkbox" class="form-check-input _big">
-                                                    <label class="form-check-label" for="escposOnline">Online</label>
-                                                </div>
-                                            </span>
-                                        </div>
+                            <div class="row row-cols-3 escpos-col">
+                                <div class="col">
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <div class="form-check">
+                                                <input id="escposOnline" type="checkbox" class="form-check-input _big">
+                                                <label class="form-check-label" for="escposOnline">Online</label>
+                                            </div>
+                                        </span>
                                     </div>
-                                    <div class="col">
-                                        <div class="input-group">
-                                            <span class="input-group-text">
-                                                <div class="form-check">
-                                                    <input id="escposPaperFeedPressed" type="checkbox" class="form-check-input _big">
-                                                    <label class="form-check-label" for="escposPaperFeedPressed">Paper Feed Pressed</label>
-                                                </div>
-                                            </span>
-                                        </div>
+                                </div>
+                                <div class="col">
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <div class="form-check">
+                                                <input id="escposPaperFeedPressed" type="checkbox" class="form-check-input _big">
+                                                <label class="form-check-label" for="escposPaperFeedPressed">Paper Feed Pressed</label>
+                                            </div>
+                                        </span>
                                     </div>
-                                    <div class="col">
-                                        <div class="input-group">
-                                            <span class="input-group-text">
-                                                <div class="form-check">
-                                                    <input id="escposCoverOpen" type="checkbox" class="form-check-input _big">
-                                                    <label class="form-check-label" for="escposCoverOpen">Cover Open</label>
-                                                </div>
-                                            </span>
-                                        </div>
+                                </div>
+                                <div class="col">
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <div class="form-check">
+                                                <input id="escposCoverOpen" type="checkbox" class="form-check-input _big">
+                                                <label class="form-check-label" for="escposCoverOpen">Cover Open</label>
+                                            </div>
+                                        </span>
                                     </div>
-                                    <div class="col">
-                                        <div class="input-group">
-                                            <span class="input-group-text">
-                                                <div class="form-check">
-                                                    <input id="escposPaperBeingFed" type="checkbox" class="form-check-input _big">
-                                                    <label class="form-check-label" for="escposPaperBeingFed">Paper Being Fed</label>
-                                                </div>
-                                            </span>
-                                        </div>
+                                </div>
+                                <div class="col">
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <div class="form-check">
+                                                <input id="escposPaperBeingFed" type="checkbox" class="form-check-input _big">
+                                                <label class="form-check-label" for="escposPaperBeingFed">Paper Being Fed</label>
+                                            </div>
+                                        </span>
                                     </div>
-                                    <div class="col">
-                                        <div class="input-group">
-                                            <span class="input-group-text">
-                                                <div class="form-check">
-                                                    <input id="escposPaperEnd" type="checkbox" class="form-check-input _big">
-                                                    <label class="form-check-label" for="escposPaperEnd">Paper End</label>
-                                                </div>
-                                            </span>
-                                        </div>
+                                </div>
+                                <div class="col">
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <div class="form-check">
+                                                <input id="escposPaperEnd" type="checkbox" class="form-check-input _big">
+                                                <label class="form-check-label" for="escposPaperEnd">Paper End</label>
+                                            </div>
+                                        </span>
                                     </div>
-                                    <div class="col">
-                                        <div class="input-group">
-                                            <span class="input-group-text">
-                                                <div class="form-check">
-                                                    <input id="escposErrorOccurred" type="checkbox" class="form-check-input _big">
-                                                    <label class="form-check-label" for="escposErrorOccurred">Error Occurred</label>
-                                                </div>
-                                            </span>
-                                        </div>
+                                </div>
+                                <div class="col">
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <div class="form-check">
+                                                <input id="escposErrorOccurred" type="checkbox" class="form-check-input _big">
+                                                <label class="form-check-label" for="escposErrorOccurred">Error Occurred</label>
+                                            </div>
+                                        </span>
                                     </div>
-                                    <div class="col">
-                                        <div class="input-group">
-                                            <span class="input-group-text">
-                                                <div class="form-check">
-                                                    <input id="escposRecoverableError" type="checkbox" class="form-check-input _big">
-                                                    <label class="form-check-label" for="escposRecoverableError">Recoverable Error</label>
-                                                </div>
-                                            </span>
-                                        </div>
+                                </div>
+                                <div class="col">
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <div class="form-check">
+                                                <input id="escposRecoverableError" type="checkbox" class="form-check-input _big">
+                                                <label class="form-check-label" for="escposRecoverableError">Recoverable Error</label>
+                                            </div>
+                                        </span>
                                     </div>
-                                    <div class="col">
-                                        <div class="input-group">
-                                            <span class="input-group-text">
-                                                <div class="form-check">
-                                                    <input id="escposCutterError" type="checkbox" class="form-check-input _big">
-                                                    <label class="form-check-label" for="escposCutterError">Auto Cutter Error</label>
-                                                </div>
-                                            </span>
-                                        </div>
+                                </div>
+                                <div class="col">
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <div class="form-check">
+                                                <input id="escposCutterError" type="checkbox" class="form-check-input _big">
+                                                <label class="form-check-label" for="escposCutterError">Auto Cutter Error</label>
+                                            </div>
+                                        </span>
                                     </div>
-                                    <div class="col">
-                                        <div class="input-group">
-                                            <span class="input-group-text">
-                                                <div class="form-check">
-                                                    <input id="escposUnrecoverableError" type="checkbox" class="form-check-input _big">
-                                                    <label class="form-check-label" for="escposUnrecoverableError">Unrecoverable Error</label>
-                                                </div>
-                                            </span>
-                                        </div>
+                                </div>
+                                <div class="col">
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <div class="form-check">
+                                                <input id="escposUnrecoverableError" type="checkbox" class="form-check-input _big">
+                                                <label class="form-check-label" for="escposUnrecoverableError">Unrecoverable Error</label>
+                                            </div>
+                                        </span>
                                     </div>
-                                    <div class="col">
-                                        <div class="input-group">
-                                            <span class="input-group-text">
-                                                <div class="form-check">
-                                                    <input id="escposAutoRecoverableError" type="checkbox" class="form-check-input _big">
-                                                    <label class="form-check-label" for="escposAutoRecoverableError">Auto Recoverable Error</label>
-                                                </div>
-                                            </span>
-                                        </div>
+                                </div>
+                                <div class="col">
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <div class="form-check">
+                                                <input id="escposAutoRecoverableError" type="checkbox" class="form-check-input _big">
+                                                <label class="form-check-label" for="escposAutoRecoverableError">Autorecoverable Error</label>
+                                            </div>
+                                        </span>
                                     </div>
-                                    <div class="col">
-                                        <div class="input-group">
-                                            <span class="input-group-text">
-                                                <div class="form-check">
-                                                    <input id="escposPaperLow" type="checkbox" class="form-check-input _big">
-                                                    <label class="form-check-label" for="escposPaperLow">Paper Low</label>
-                                                </div>
-                                            </span>
-                                        </div>
+                                </div>
+                                <div class="col">
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <div class="form-check">
+                                                <input id="escposPaperLow" type="checkbox" class="form-check-input _big">
+                                                <label class="form-check-label" for="escposPaperLow">Paper Low</label>
+                                            </div>
+                                        </span>
                                     </div>
                                 </div>
                             </div>
