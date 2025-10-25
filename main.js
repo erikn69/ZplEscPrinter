@@ -21,6 +21,12 @@ const createWindow = () => {
         }
     })
 
+    win.on('blur', () => {
+        win.webContents.send('window-focus-change', 'blurred');
+    });
+    win.on('focus', () => {
+        win.webContents.send('window-focus-change', 'focused');
+    });
     win.loadFile('ZplEscPrinter/main.html')
     if(process.env.NODE_ENV === "development"){
         win.webContents.openDevTools()

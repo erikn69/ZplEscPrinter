@@ -128,7 +128,7 @@ async function zpl(data){
     try{ data = base64DecodeUnicode(data.trim()); }catch(e){}
     const zpls = data.split(/\^XZ|\^xz/);
     const factor = configs.unit === '1' ? 1 : (configs.unit === '2' ? 2.54 : (configs.unit === '3' ? 25.4 : 96.5));
-    const width = parseFloat(configs.width) / factor;
+    const width = Math.round(parseFloat(configs.width) * 1000 / factor) / 1000;
     const height = Math.round(parseFloat(configs.height) * 1000 / factor) / 1000;
 
     if (zpls.length > 1 && zpls[zpls.length - 1].trim() === '') {
@@ -297,7 +297,8 @@ function startTcpServer() {
                 const response = JSON.stringify({success: true});
                 sock.write('HTTP/1.1 200 OK\r\nContent-Type: application/json\r\nContent-Length: ' + Buffer.byteLength(response) + '\r\n\r\n' + response);
                 sock.end();
-                data = Buffer.from(textView.replace(regex,''), 'utf8');
+                textView = textView.replace(regex,'');
+                data = Buffer.from(textView, 'utf8');
             }
 
             const code = data;
@@ -470,6 +471,14 @@ function initEvents() {
             } else {
                 escpos(base64, true);
             }
+        }
+    });
+
+    ipcRenderer.on('window-focus-change', (event, status) => {
+        if (status === 'blurred') {
+            $(window).trigger('blur');
+        } else if (status === 'focused') {
+            $(window).trigger('focus');
         }
     });
 }
