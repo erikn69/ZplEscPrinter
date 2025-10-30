@@ -481,6 +481,12 @@ function initEvents() {
             $(window).trigger('focus');
         }
     });
+    
+    ipcRenderer.on('app-version-response', (event, version) => {
+        if (version) $('#app-version').html(' v' + version);
+    });
+
+    ipcRenderer.send('get-app-version');
 }
 // Toggle on/off switch
 // @param {Dom Object} btn Button group to toggle

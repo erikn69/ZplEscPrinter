@@ -1,10 +1,17 @@
 const { app, BrowserWindow, dialog, ipcMain } = require('electron')
 const path = require("path")
+const fs = require('fs')
 
 if (require('electron-squirrel-startup')) return app.quit();
 
 const { updateElectronApp, UpdateSourceType } = require('update-electron-app')
 updateElectronApp()
+
+// Obtener la versión una sola vez al inicio
+let appVersion = false;
+try {
+    appVersion = JSON.parse(fs.readFileSync(path.join(app.getAppPath(), 'package.json'), 'utf8')).version;
+} catch (error) { console.error("Error al cargar la versión en main.js:", error.message); }
 
 let win
 const createWindow = () => {
@@ -46,6 +53,10 @@ ipcMain.on('select-file', async (event, arg) => {
         filters: [{ name: 'Raw Print', extensions: ['raw', 'bin', 'txt', 'print'] }]
     })
     event.sender.send('selected-file', result.filePaths)
+})
+
+ipcMain.on('get-app-version', (event) => {
+    event.reply('app-version-response', appVersion)
 })
 
 app.whenReady().then(() => {
