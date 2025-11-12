@@ -9,6 +9,7 @@ let clientSocketInfo;
 let server;
 let configs = {};
 const escposCommands = new EscposCommands(configs);
+const zplCommands = new ZplCommands(configs);
 
 const defaults = {
     isZpl: true,
@@ -25,6 +26,14 @@ const defaults = {
     filetype: '3',
     path: null,
     counter: 0,
+    zplHeadOpen: false,
+    zplPaperOut: false,
+    zplRibbonOut: false,
+    zplCutterFault: false,
+    zplHeadTooHot: false,
+    zplMotorOverheat: false,
+    zplPrinterPaused: false,
+    zplPaperJam: false,
     escposOnline: true,
     escposPaperFeedPressed: false,
     escposCoverOpen: false,
@@ -126,6 +135,13 @@ function notify(text, glyphicon, type, delay) {
 async function zpl(data){
     data = data.toString('utf8');
     try{ data = base64DecodeUnicode(data.trim()); }catch(e){}
+
+    if (zplCommands.matchCommand(data)) {
+        console.log('Command: ' + zplCommands.getResponse(data).toString('utf8'));
+        notify('A response has been sent to the received internal command.');
+        return zplCommands.getResponse(data);
+    }
+
     const zpls = data.split(/\^XZ|\^xz/);
     const factor = configs.unit === '1' ? 1 : (configs.unit === '2' ? 2.54 : (configs.unit === '3' ? 25.4 : 96.5));
     const width = Math.round(parseFloat(configs.width) * 1000 / factor) / 1000;
@@ -163,6 +179,7 @@ async function zpl(data){
             await saveLabel(zpl, "raw", counter);
         }
     }
+    return null;
 }
 
 /**
@@ -175,14 +192,10 @@ async function escpos(data,b64){
     let dataAux = data.toString('utf8');
     try{ dataAux = base64DecodeUnicode(dataAux.trim()); b64=true; }catch(e){}
 
-    if (dataAux === escposCommands.getStatusCommand) {
-        return Buffer.from(escposCommands.getEscposStatus());
-    } else if (dataAux === escposCommands.getOfflineCauseCommand) {
-        return Buffer.from(escposCommands.getOfflineCause())
-    } else if (dataAux === escposCommands.getErrorCauseCommand) {
-        return Buffer.from(escposCommands.getErrorCause())
-    } else if (dataAux === escposCommands.getRollPaperStatusCommand) {
-        return Buffer.from(escposCommands.getRollPaperStatus())
+    if (escposCommands.matchCommand(dataAux)) {
+        console.log('Command: ' + escposCommands.getResponse(data).toString('utf8'));
+        notify('A response has been sent to the received internal command.');
+        return escposCommands.getResponse(dataAux);
     }
 
     //console.log(dataAux);
@@ -222,7 +235,7 @@ async function escpos(data,b64){
             await saveLabel(b64 ? base64DecodeUnicode(data) : data, "raw", getCounter());
         }
     }
-    return null
+    return null;
 }
 async function displayEscPosLabel (data){
     let frame = $('<iframe class="label-esc w-100"></iframe>');
@@ -324,12 +337,13 @@ function startTcpServer() {
             }
 
             try{
-                if ($('#isZpl').is(':checked')) {
-                    zpl(code);
-                } else {
-                    const response = await escpos(code);
-                    if (response) sock.write(response);
-                }
+                let response;
+                if ($('#isZpl').is(':checked'))
+                    response = await zpl(code);
+                else
+                    response = await escpos(code);
+                if (response) sock.write(response);
+                sock.end();
             }catch(err){
                 console.error(err);
                 notify('ERROR: {0}'.format(err.message), 'print', 'danger', 0);
@@ -489,7 +503,10 @@ function initEvents() {
     });
 
     ipcRenderer.on('app-version-response', (event, version) => {
-        if (version) $('#app-version').html(' v' + version);
+        if (version) {
+            $('#app-version').html(' v' + version);
+            configs['version'] = ' v' + version;
+        }
     });
 
     ipcRenderer.send('get-app-version');

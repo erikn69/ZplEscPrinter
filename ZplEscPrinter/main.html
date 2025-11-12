@@ -3,7 +3,8 @@
 <head>
     <title>Printer Emulator</title>
     <link href="css/style.css" type="text/css" rel="stylesheet"/>
-    <script src="js/commands.js" type="text/javascript"></script>
+    <script src="js/esc_commands.js" type="text/javascript"></script>
+    <script src="js/zpl_commands.js" type="text/javascript"></script>
     <script src="js/main.js" type="module"></script>
 </head>
 
@@ -194,6 +195,100 @@
                                     <label for="path">Directory Path</label>
                                 </div>
                                 <button id="btn-path" type="button" class="btn btn-secondary">Choose</button>
+                            </div>
+                        </fieldset>
+                        <fieldset class="border rounded p-2 is-zpl">
+                            <legend class="float-none w-auto px-2 mb-0 fs-6 fw-semibold">ZPL Status</legend>
+                            <div class="row row-cols-3 escpos-col">
+                                <div class="col">
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <div class="form-check">
+                                                <input id="zplHeadOpen" type="checkbox" class="form-check-input _big">
+                                                <label class="form-check-label" for="zplHeadOpen">Head Open</label>
+                                            </div>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <div class="form-check">
+                                                <input id="zplPaperOut" type="checkbox" class="form-check-input _big">
+                                                <label class="form-check-label" for="zplPaperOut">Paper Out</label>
+                                            </div>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <div class="form-check">
+                                                <input id="zplRibbonOut" type="checkbox" class="form-check-input _big">
+                                                <label class="form-check-label" for="zplRibbonOut">Ribbon Out</label>
+                                            </div>
+                                        </span>
+                                    </div>
+                                </div><div class="col">
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <div class="form-check">
+                                                <input id="zplPaperJam" type="checkbox" class="form-check-input _big">
+                                                <label class="form-check-label" for="zplPaperJam">Paper Jam</label>
+                                            </div>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <div class="form-check">
+                                                <input id="zplPrinterPaused" type="checkbox" class="form-check-input _big">
+                                                <label class="form-check-label" for="zplPrinterPaused">Printer Paused</label>
+                                            </div>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <div class="form-check">
+                                                <input id="zplCutterFault" type="checkbox" class="form-check-input _big">
+                                                <label class="form-check-label" for="zplCutterFault">Cutter Fault</label>
+                                            </div>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <div class="form-check">
+                                                <input id="zplHeadTooHot" type="checkbox" class="form-check-input _big">
+                                                <label class="form-check-label" for="zplHeadTooHot">Head Too Hot</label>
+                                            </div>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <div class="form-check">
+                                                <input id="zplMotorOverheat" type="checkbox" class="form-check-input _big">
+                                                <label class="form-check-label" for="zplMotorOverheat">Motor Overheat</label>
+                                            </div>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <div class="form-check">
+                                                <input id="zplRewindFault" type="checkbox" class="form-check-input _big">
+                                                <label class="form-check-label" for="zplRewindFault">Rewind Fault</label>
+                                            </div>
+                                        </span>
+                                    </div>
+                                </div>
                             </div>
                         </fieldset>
                         <fieldset class="border rounded p-2 is-esc">

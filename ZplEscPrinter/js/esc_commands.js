@@ -1,10 +1,29 @@
 class EscposCommands {
   constructor(configs) {
-    this.getStatusCommand = "\u0010\u0004\x01";
-    this.getOfflineCauseCommand = "\u0010\u0004\x02";
-    this.getErrorCauseCommand = "\u0010\u0004\x03";
-    this.getRollPaperStatusCommand = "\u0010\u0004\x04";
     this.configs = configs;
+    this.commands = {
+        getStatusCommand: "\u0010\u0004\x01",
+        getOfflineCauseCommand: "\u0010\u0004\x02",
+        getErrorCauseCommand: "\u0010\u0004\x02",
+        getRollPaperStatusCommand: "\u0010\u0004\x04",
+    };
+  }
+
+  matchCommand(data) {
+    return Object.values(this.commands).includes(data);
+  }
+
+  getResponse(data) {
+    switch (data) {
+      case this.commands.getStatusCommand:
+        return Buffer.from(this.getEscposStatus());
+      case this.commands.getOfflineCauseCommand:
+        return Buffer.from(this.getOfflineCause());
+      case this.commands.getErrorCauseCommand:
+        return Buffer.from(this.getErrorCause());
+      case this.commands.getRollPaperStatusCommand:
+        return Buffer.from(this.getRollPaperStatus());
+    }
   }
 
   /**
