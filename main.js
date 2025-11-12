@@ -7,7 +7,6 @@ if (require('electron-squirrel-startup')) return app.quit();
 const { updateElectronApp, UpdateSourceType } = require('update-electron-app')
 updateElectronApp()
 
-// Obtener la versión una sola vez al inicio
 let appVersion = false;
 try {
     appVersion = JSON.parse(fs.readFileSync(path.join(app.getAppPath(), 'package.json'), 'utf8')).version;
