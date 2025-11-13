@@ -231,7 +231,7 @@ async function escpos(data,b64){
             console.log('Error in fetching ESC/POS html', `status = ${jqXHR.status}`, errorThrown, 'esc = '+(b64 ? base64DecodeUnicode(data) : data))
         });
 
-        if (!fail && [1, '1', true, 'true'].includes(configs.saveLabels)) {
+        if (!fail && [1, '1', true, 'true'].includes(configs.saveLabels) && configs.filetype === '3') {
             await saveLabel(b64 ? base64DecodeUnicode(data) : data, "raw", getCounter());
         }
     }
@@ -239,15 +239,38 @@ async function escpos(data,b64){
 }
 async function displayEscPosLabel (data){
     let frame = $('<iframe class="label-esc w-100"></iframe>');
-    frame.attr('srcdoc', base64DecodeUnicode(data));
+    data = base64DecodeUnicode(data);
+    frame.attr('srcdoc', data);
     $('#label-esc').prepend(frame);
     frame.on('load',function(){
         //console.log(frame.contents().find("body").height());
         frame.height((frame.contents().find("body").height() + 30) + 'px');
         $('#label-esc').css({'top': `-${frame.height() - 28}px`}).animate({'top': '0px'}, 1500);
     });
-
     frame.trigger('load');
+    if(![1, '1', true, 'true'].includes(configs.saveLabels) || configs.filetype === '3') return;
+    const tempContainer = $('<div style="position:absolute;left:-9999px;1200px;height:auto;top:0;" />').html(data).appendTo('body');
+    if (configs.filetype === '1') {
+        html2canvas(tempContainer[0], {}).then(function(canvas) {
+            canvas.toBlob(function(blob){ saveLabel(blob, "png", getCounter()); },'image/png');
+        }).catch(error => {
+            console.error("Error generating PNG File:", error);
+        });
+    }
+    else if (configs.filetype === '2') {
+        html2canvas(tempContainer[0], {}).then(function(canvas) {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF('p', 'mm', 'a4'),
+                imgData = canvas.toDataURL('image/png'),
+                dpi = 96, mmPerInch = 25.4;
+
+            doc.addImage(imgData, 'PNG', 0, 0, (canvas.width/dpi) * mmPerInch, (canvas.height/dpi) * mmPerInch);
+            saveLabel(doc.output('blob'), "pdf", getCounter());
+        }).catch(error => {
+            console.error("Error generating PDF File:", error);
+        });
+    }
+    tempContainer.remove();
 }
 async function displayZplImage(api_url, zpl, width, height) {
     let r1 = await fetch(api_url, {

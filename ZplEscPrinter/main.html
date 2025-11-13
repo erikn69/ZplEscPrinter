@@ -5,6 +5,8 @@
     <link href="css/style.css" type="text/css" rel="stylesheet"/>
     <script src="js/esc_commands.js" type="text/javascript"></script>
     <script src="js/zpl_commands.js" type="text/javascript"></script>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="js/main.js" type="module"></script>
 </head>
 
@@ -172,19 +174,13 @@
                                                 <label class="form-check-label" for="saveLabels">Save labels</label>
                                             </div>
                                         </span>
-                                        <div class="form-floating is-zpl">
+                                        <div class="form-floating">
                                             <select id="filetype" class="form-select" aria-label="File Type">
                                                 <option value="1">PNG</option>
                                                 <option value="2">PDF</option>
                                                 <option value="3">RAW</option>
                                             </select>
                                             <label for="filetype">File Type</label>
-                                        </div>
-                                        <div class="form-floating is-esc">
-                                            <select id="filetype-dump" class="form-select" aria-label="File Type" disabled>
-                                                <option value="3">RAW</option>
-                                            </select>
-                                            <label for="filetype-dump">File Type</label>
                                         </div>
                                     </div>
                                 </div>
