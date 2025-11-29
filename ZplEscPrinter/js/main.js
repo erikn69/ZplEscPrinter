@@ -330,8 +330,10 @@ function startTcpServer() {
             peerPort: sock.remotePort
         };
 
-        sock.on('data', async function (data) {
-            notify(`${data.length} bytes received from Client: <b>${sock.remoteAddress}</b> Port: <b>${sock.remotePort}</b>`, 'print', 'info', 1000);
+        // Buffer to accumulate data chunks (fix for large data > 64KB)
+        let buffer = Buffer.alloc(0);
+        let processTimeout = null;
+        async function processData(data) {
             let textView = data.toString('utf8');//console.log(textView);
 
             const regex = /POST.*\r\n\r\n/gs;
@@ -366,13 +368,20 @@ function startTcpServer() {
                 else
                     response = await escpos(code);
                 if (response) sock.write(response);
+                //console.log(response);
                 sock.end();
             }catch(err){
                 console.error(err);
                 notify('ERROR: {0}'.format(err.message), 'print', 'danger', 0);
             }
+        }
+        sock.on('data', function (data) {
+            buffer = Buffer.concat([buffer, data]);
+            notify(`${buffer.length} bytes received from Client: <b>${sock.remoteAddress}</b> Port: <b>${sock.remotePort}</b>`, 'print', 'info', 1000);
+            // Debounce: wait 100ms after last chunk before processing
+            if (processTimeout) clearTimeout(processTimeout);
+            processTimeout = setTimeout(() => processData(buffer), 100);
         });
-
     });
 }
 // Stop tcp server
