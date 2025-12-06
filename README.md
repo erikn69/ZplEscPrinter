@@ -5,6 +5,52 @@ You can configure print density, label size and the tcp server to listen for any
 
 [Releases](https://github.com/erikn69/ZplEscPrinter/releases/latest)
 
+## Installation
+
+#### Windows
+- Download `zpl-escpos-printer-*-setup.exe` from releases
+- Run the installer
+
+#### Linux
+```bash
+# Debian/Ubuntu
+sudo dpkg -i zpl-escpos-printer_*_amd64.deb
+
+# RedHat/CentOS
+sudo rpm -i zpl-escpos-printer-*.x86_64.rpm
+```
+
+#### macOS
+```bash
+# Unzip the file
+unzip Zpl-EscPos.Printer-darwin-*.zip
+# Move to Applications
+mv "Zpl-EscPos Printer.app" /Applications/
+```
+
+## Development
+
+### Prerequisites
+- **Node.js** 18+ (recommended : 20 LTS)
+- **yarn** (recommended) or **npm**
+- **Git**
+
+### Installation
+```bash
+git clone https://github.com/erikn69/ZplEscPrinter.git
+cd ZplEscPrinter
+yarn install  # or: npm install
+```
+
+### Commands
+```bash
+yarn start       # Development mode with logs
+yarn package     # Package for current OS
+yarn make        # Generate multi-OS binaries
+```
+
+*npm equivalent :* `npm start`, `npm run package`, `npm run make`
+
 ## New in Version 3.0
 
 The app now emulates Epson ESC/POS. The emulator is based on the [escpos-netprinter](https://github.com/gilbertfl/escpos-netprinter/blob/master/esc2html.php) repo by [@gilbertfl](https://github.com/gilbertfl)/[@mike42](https://github.com/mike42), and can be installed via the binaries/zips on the GitHub Releases page. It currently supports
