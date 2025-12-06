@@ -232,7 +232,11 @@ async function escpos(data,b64){
         });
 
         if (!fail && [1, '1', true, 'true'].includes(configs.saveLabels) && configs.filetype === '3') {
-            await saveLabel(b64 ? base64DecodeUnicode(data) : data, "raw", getCounter());
+            data = b64 ? base64DecodeUnicode(data) : data;
+            const counter = getCounter(), hexdump = captureHexdump(data);
+            await saveLabel(data, "raw", counter);
+            if (hexdump)
+                await saveLabel(hexdump, "hexdump", counter);
         }
     }
     return null;
@@ -302,6 +306,38 @@ async function displayZplImage(api_url, zpl, width, height) {
     $('#label-zpl').prepend(img).css({'top': `-${offset}px`}).animate({'top': '0px'}, 1500);
 
     return blob;
+}
+function captureHexdump(data) {
+    try {
+        const buf = Buffer.isBuffer(data) ? data : Buffer.from(data, 'binary');
+        let hexdump = '';
+        hexdump += '='.repeat(80) + '\n';
+        hexdump += `CAPTURE TIMESTAMP: ${new Date().toISOString()}\n`;
+        hexdump += `DATA SIZE: ${buf.length} bytes\n`;
+        hexdump += '='.repeat(80) + '\n\n';
+        for (let i = 0; i < buf.length; i += 16) {
+            const chunk = buf.slice(i, i + 16);
+            const offset = i.toString(16).padStart(8, '0');
+            const hexArr = Array.from(chunk).map(b => b.toString(16).padStart(2, '0'));
+            const hex = hexArr.length > 8
+                ? hexArr.slice(0, 8).join(' ') + '  ' + hexArr.slice(8).join(' ')
+                : hexArr.join(' ');
+            const hexPadded = hex.padEnd(49, ' ');
+            const ascii = Array.from(chunk)
+                .map(b => (b >= 32 && b <= 126) ? String.fromCharCode(b) : '.')
+                .join('');
+            hexdump += `${offset}  ${hexPadded} |${ascii}|\n`;
+        }
+        hexdump += '\n' + '='.repeat(80) + '\n';
+        hexdump += 'RAW BASE64 (for re-processing):\n';
+        hexdump += buf.toString('base64') + '\n';
+        hexdump += '='.repeat(80) + '\n';
+        return hexdump;
+    } catch (error) {
+        console.error('[HEXDUMP ERROR]', error);
+        notify(`Hexdump capture error: ${error.message}`, 'exclamation-sign', 'warning');
+        return '';
+    }
 }
 function getCounter () {
     let item = global.localStorage.getItem('counter') || '0';
