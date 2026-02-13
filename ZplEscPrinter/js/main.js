@@ -2,7 +2,7 @@ const $ = global.$ = global.jQuery = require('jquery');
 const createPopper = global.createPopper = require('@popperjs/core');
 const Bootstrap = global.Bootstrap = require('bootstrap');
 const { ipcRenderer } = require('electron');
-const fs = require('fs');;
+const fs = require('fs');
 const net = require('net');
 
 let clientSocketInfo;
@@ -26,6 +26,7 @@ const defaults = {
     filetype: '3',
     path: null,
     counter: 0,
+    // ZPL ~HS status flags
     zplHeadOpen: false,
     zplPaperOut: false,
     zplRibbonOut: false,
@@ -34,6 +35,22 @@ const defaults = {
     zplMotorOverheat: false,
     zplPrinterPaused: false,
     zplPaperJam: false,
+    zplRewindFault: false,
+    // ZPL ~HQES error flags
+    zplHqesMediaOut: false,
+    zplHqesRibbonOut: false,
+    zplHqesHeadOpen: false,
+    zplHqesCutterFault: false,
+    zplHqesPrintheadOverTemp: false,
+    zplHqesMotorOverTemp: false,
+    zplHqesBadPrintheadElement: false,
+    zplHqesPrintheadDetectionError: false,
+    // ZPL ~HQES warning flags
+    zplHqesMediaNearEnd: false,
+    zplHqesRibbonNearEnd: false,
+    zplHqesReplacePrinthead: false,
+    zplHqesCleanPrinthead: false,
+    // EscPos flags
     escposOnline: true,
     escposPaperFeedPressed: false,
     escposCoverOpen: false,
@@ -136,10 +153,17 @@ async function zpl(data){
     data = data.toString('utf8');
     try{ data = base64DecodeUnicode(data.trim()); }catch(e){}
 
-    if (zplCommands.matchCommand(data)) {
-        console.log('Command: ' + zplCommands.getResponse(data).toString('utf8'));
+    const cmdResult = zplCommands.matchCommand(data);
+    if (cmdResult) {
+        if (cmdResult.action) { // Handle action commands (~JA, ~PS)
+            cmdResult.action(configs, notify);
+            notify('Command <b>' + data.trim() + '</b> executed: ' + cmdResult.message);
+            return cmdResult.response ? Buffer.from(cmdResult.response, 'utf8') : null;
+        }
+        const response = zplCommands.getResponse(data);
+        console.log('Command: ' + response.toString('utf8'));
         notify('A response has been sent to the received internal command.');
-        return zplCommands.getResponse(data);
+        return response;
     }
 
     const zpls = data.split(/\^XZ|\^xz/);
@@ -163,7 +187,7 @@ async function zpl(data){
             .format(configs.density, width>15.0 ? 15 : width, height);
         let blob = await displayZplImage(api_url, zpl, width, height);
 
-        if (![1, '1', true, 'true'].includes(configs.saveLabels)) {
+        if (!_isTruthy(includes(configs.saveLabels))) {
             continue;
         }
 
@@ -193,9 +217,10 @@ async function escpos(data,b64){
     try{ dataAux = base64DecodeUnicode(dataAux.trim()); b64=true; }catch(e){}
 
     if (escposCommands.matchCommand(dataAux)) {
-        console.log('Command: ' + escposCommands.getResponse(data).toString('utf8'));
+        const response = escposCommands.getResponse(dataAux);
+        console.log('Command: ' + response.toString('utf8'));
         notify('A response has been sent to the received internal command.');
-        return escposCommands.getResponse(dataAux);
+        return response;
     }
 
     //console.log(dataAux);
@@ -231,7 +256,7 @@ async function escpos(data,b64){
             console.log('Error in fetching ESC/POS html', `status = ${jqXHR.status}`, errorThrown, 'esc = '+(b64 ? base64DecodeUnicode(data) : data))
         });
 
-        if (!fail && [1, '1', true, 'true'].includes(configs.saveLabels) && configs.filetype === '3') {
+        if (!fail && _isTruthy(configs.saveLabels) && configs.filetype === '3') {
             data = b64 ? base64DecodeUnicode(data) : data;
             const counter = getCounter(), hexdump = captureHexdump(data);
             await saveLabel(data, "raw", counter);
@@ -252,7 +277,7 @@ async function displayEscPosLabel (data){
         $('#label-esc').css({'top': `-${frame.height() - 28}px`}).animate({'top': '0px'}, 1500);
     });
     frame.trigger('load');
-    if(![1, '1', true, 'true'].includes(configs.saveLabels) || configs.filetype === '3') return;
+    if(!_isTruthy(configs.saveLabels) || configs.filetype === '3') return;
     const tempContainer = $('<div style="position:absolute;left:-9999px;1200px;height:auto;top:0;" />').html(data).appendTo('body');
     if (configs.filetype === '1') {
         html2canvas(tempContainer[0], {}).then(function(canvas) {
@@ -347,7 +372,7 @@ function getCounter () {
     global.localStorage.setItem('counter', `${++counter}`);
     return counter;
 }
-// Start tcp server and listen on configuret host/port
+// Start tcp server and listen on configured host/port
 function startTcpServer() {
     if (server != undefined) {
         return;
@@ -393,7 +418,7 @@ function startTcpServer() {
                 return;
             }
 
-            if (![1, '1', true, 'true'].includes(configs.keepTcpSocket)) {
+            if (!_isTruthy(configs.keepTcpSocket)) {
                 toggleSwitch('#on_off');
             }
 
@@ -623,7 +648,7 @@ function initConfigs(context) {
         }
 
         if (['checkbox', 'radio'].includes(($el.attr('type') || '').toLowerCase())) {
-            $el.prop('checked', [true, 'true', 1, '1'].includes(configs[key])).trigger('change');
+            $el.prop('checked', _isTruthy(configs[key])).trigger('change');
         } else {
             $el.val(configs[key]);
         }
@@ -659,4 +684,7 @@ Number.prototype.padLeft = function (width, character) {
     character = character || '0';
     let str = this + '';
     return str.length >= width ? str : new Array(width - str.length + 1).join(character) + str;
+}
+function _isTruthy(val) {
+    return [1, '1', true, 'true'].includes(val);
 }

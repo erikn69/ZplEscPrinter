@@ -193,215 +193,361 @@
                                 <button id="btn-path" type="button" class="btn btn-secondary">Choose</button>
                             </div>
                         </fieldset>
-                        <fieldset class="border rounded p-2 is-zpl">
-                            <legend class="float-none w-auto px-2 mb-0 fs-6 fw-semibold">ZPL Status</legend>
-                            <div class="row row-cols-3 escpos-col">
-                                <div class="col">
-                                    <div class="input-group">
-                                        <span class="input-group-text">
-                                            <div class="form-check">
-                                                <input id="zplHeadOpen" type="checkbox" class="form-check-input _big">
-                                                <label class="form-check-label" for="zplHeadOpen">Head Open</label>
-                                            </div>
-                                        </span>
+                        <ul class="nav nav-tabs pt-2 is-zpl" id="zplConfigsTab" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link fw-semibold active" id="zpl-status" data-bs-toggle="tab" data-bs-target="#zpl-status-content" type="button" role="tab" aria-controls="zpl-status-content" aria-selected="true">ZPL Status</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link fw-semibold" id="zpl-warnings" data-bs-toggle="tab" data-bs-target="#zpl-warnings-content" type="button" role="tab" aria-controls="zpl-warnings-content" aria-selected="true">ZPL Warnings</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link fw-semibold" id="zpl-errors" data-bs-toggle="tab" data-bs-target="#zpl-errors-content" type="button" role="tab" aria-controls="zpl-errors-content" aria-selected="true">ZPL Errors</button>
+                            </li>
+                        </ul>
+                        <div class="tab-content is-zpl" id="zplConfigsTabsContent">
+                            <div class="tab-pane fade show active" id="zpl-status-content" role="tabpanel" aria-labelledby="zpl-status">
+                                <div class="row row-cols-3 config-col">
+                                    <div class="col">
+                                        <div class="input-group">
+                                            <span class="input-group-text">
+                                                <div class="form-check">
+                                                    <input id="zplHeadOpen" type="checkbox" class="form-check-input _big">
+                                                    <label class="form-check-label" for="zplHeadOpen">Head Open</label>
+                                                </div>
+                                            </span>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col">
-                                    <div class="input-group">
-                                        <span class="input-group-text">
-                                            <div class="form-check">
-                                                <input id="zplPaperOut" type="checkbox" class="form-check-input _big">
-                                                <label class="form-check-label" for="zplPaperOut">Paper Out</label>
-                                            </div>
-                                        </span>
+                                    <div class="col">
+                                        <div class="input-group">
+                                            <span class="input-group-text">
+                                                <div class="form-check">
+                                                    <input id="zplPaperOut" type="checkbox" class="form-check-input _big">
+                                                    <label class="form-check-label" for="zplPaperOut">Paper Out</label>
+                                                </div>
+                                            </span>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col">
-                                    <div class="input-group">
-                                        <span class="input-group-text">
-                                            <div class="form-check">
-                                                <input id="zplRibbonOut" type="checkbox" class="form-check-input _big">
-                                                <label class="form-check-label" for="zplRibbonOut">Ribbon Out</label>
-                                            </div>
-                                        </span>
+                                    <div class="col">
+                                        <div class="input-group">
+                                            <span class="input-group-text">
+                                                <div class="form-check">
+                                                    <input id="zplRibbonOut" type="checkbox" class="form-check-input _big">
+                                                    <label class="form-check-label" for="zplRibbonOut">Ribbon Out</label>
+                                                </div>
+                                            </span>
+                                        </div>
+                                    </div><div class="col">
+                                        <div class="input-group">
+                                            <span class="input-group-text">
+                                                <div class="form-check">
+                                                    <input id="zplPaperJam" type="checkbox" class="form-check-input _big">
+                                                    <label class="form-check-label" for="zplPaperJam">Paper Jam</label>
+                                                </div>
+                                            </span>
+                                        </div>
                                     </div>
-                                </div><div class="col">
-                                    <div class="input-group">
-                                        <span class="input-group-text">
-                                            <div class="form-check">
-                                                <input id="zplPaperJam" type="checkbox" class="form-check-input _big">
-                                                <label class="form-check-label" for="zplPaperJam">Paper Jam</label>
-                                            </div>
-                                        </span>
+                                    <div class="col">
+                                        <div class="input-group">
+                                            <span class="input-group-text">
+                                                <div class="form-check">
+                                                    <input id="zplPrinterPaused" type="checkbox" class="form-check-input _big">
+                                                    <label class="form-check-label" for="zplPrinterPaused">Printer Paused</label>
+                                                </div>
+                                            </span>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col">
-                                    <div class="input-group">
-                                        <span class="input-group-text">
-                                            <div class="form-check">
-                                                <input id="zplPrinterPaused" type="checkbox" class="form-check-input _big">
-                                                <label class="form-check-label" for="zplPrinterPaused">Printer Paused</label>
-                                            </div>
-                                        </span>
+                                    <div class="col">
+                                        <div class="input-group">
+                                            <span class="input-group-text">
+                                                <div class="form-check">
+                                                    <input id="zplCutterFault" type="checkbox" class="form-check-input _big">
+                                                    <label class="form-check-label" for="zplCutterFault">Cutter Fault</label>
+                                                </div>
+                                            </span>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col">
-                                    <div class="input-group">
-                                        <span class="input-group-text">
-                                            <div class="form-check">
-                                                <input id="zplCutterFault" type="checkbox" class="form-check-input _big">
-                                                <label class="form-check-label" for="zplCutterFault">Cutter Fault</label>
-                                            </div>
-                                        </span>
+                                    <div class="col">
+                                        <div class="input-group">
+                                            <span class="input-group-text">
+                                                <div class="form-check">
+                                                    <input id="zplHeadTooHot" type="checkbox" class="form-check-input _big">
+                                                    <label class="form-check-label" for="zplHeadTooHot">Head Too Hot</label>
+                                                </div>
+                                            </span>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col">
-                                    <div class="input-group">
-                                        <span class="input-group-text">
-                                            <div class="form-check">
-                                                <input id="zplHeadTooHot" type="checkbox" class="form-check-input _big">
-                                                <label class="form-check-label" for="zplHeadTooHot">Head Too Hot</label>
-                                            </div>
-                                        </span>
+                                    <div class="col">
+                                        <div class="input-group">
+                                            <span class="input-group-text">
+                                                <div class="form-check">
+                                                    <input id="zplMotorOverheat" type="checkbox" class="form-check-input _big">
+                                                    <label class="form-check-label" for="zplMotorOverheat">Motor Overheat</label>
+                                                </div>
+                                            </span>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col">
-                                    <div class="input-group">
-                                        <span class="input-group-text">
-                                            <div class="form-check">
-                                                <input id="zplMotorOverheat" type="checkbox" class="form-check-input _big">
-                                                <label class="form-check-label" for="zplMotorOverheat">Motor Overheat</label>
-                                            </div>
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="input-group">
-                                        <span class="input-group-text">
-                                            <div class="form-check">
-                                                <input id="zplRewindFault" type="checkbox" class="form-check-input _big">
-                                                <label class="form-check-label" for="zplRewindFault">Rewind Fault</label>
-                                            </div>
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </fieldset>
-                        <fieldset class="border rounded p-2 is-esc">
-                            <legend class="float-none w-auto px-2 mb-0 fs-6 fw-semibold">ESC/POS Status</legend>
-                            <div class="row row-cols-3 escpos-col">
-                                <div class="col">
-                                    <div class="input-group">
-                                        <span class="input-group-text">
-                                            <div class="form-check">
-                                                <input id="escposOnline" type="checkbox" class="form-check-input _big">
-                                                <label class="form-check-label" for="escposOnline">Online</label>
-                                            </div>
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="input-group">
-                                        <span class="input-group-text">
-                                            <div class="form-check">
-                                                <input id="escposPaperFeedPressed" type="checkbox" class="form-check-input _big">
-                                                <label class="form-check-label" for="escposPaperFeedPressed">Paper Feed Pressed</label>
-                                            </div>
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="input-group">
-                                        <span class="input-group-text">
-                                            <div class="form-check">
-                                                <input id="escposCoverOpen" type="checkbox" class="form-check-input _big">
-                                                <label class="form-check-label" for="escposCoverOpen">Cover Open</label>
-                                            </div>
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="input-group">
-                                        <span class="input-group-text">
-                                            <div class="form-check">
-                                                <input id="escposPaperBeingFed" type="checkbox" class="form-check-input _big">
-                                                <label class="form-check-label" for="escposPaperBeingFed">Paper Being Fed</label>
-                                            </div>
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="input-group">
-                                        <span class="input-group-text">
-                                            <div class="form-check">
-                                                <input id="escposPaperEnd" type="checkbox" class="form-check-input _big">
-                                                <label class="form-check-label" for="escposPaperEnd">Paper End</label>
-                                            </div>
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="input-group">
-                                        <span class="input-group-text">
-                                            <div class="form-check">
-                                                <input id="escposErrorOccurred" type="checkbox" class="form-check-input _big">
-                                                <label class="form-check-label" for="escposErrorOccurred">Error Occurred</label>
-                                            </div>
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="input-group">
-                                        <span class="input-group-text">
-                                            <div class="form-check">
-                                                <input id="escposRecoverableError" type="checkbox" class="form-check-input _big">
-                                                <label class="form-check-label" for="escposRecoverableError">Recoverable Error</label>
-                                            </div>
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="input-group">
-                                        <span class="input-group-text">
-                                            <div class="form-check">
-                                                <input id="escposCutterError" type="checkbox" class="form-check-input _big">
-                                                <label class="form-check-label" for="escposCutterError">Auto Cutter Error</label>
-                                            </div>
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="input-group">
-                                        <span class="input-group-text">
-                                            <div class="form-check">
-                                                <input id="escposUnrecoverableError" type="checkbox" class="form-check-input _big">
-                                                <label class="form-check-label" for="escposUnrecoverableError">Unrecoverable Error</label>
-                                            </div>
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="input-group">
-                                        <span class="input-group-text">
-                                            <div class="form-check">
-                                                <input id="escposAutoRecoverableError" type="checkbox" class="form-check-input _big">
-                                                <label class="form-check-label" for="escposAutoRecoverableError">Autorecoverable Error</label>
-                                            </div>
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="input-group">
-                                        <span class="input-group-text">
-                                            <div class="form-check">
-                                                <input id="escposPaperLow" type="checkbox" class="form-check-input _big">
-                                                <label class="form-check-label" for="escposPaperLow">Paper Low</label>
-                                            </div>
-                                        </span>
+                                    <div class="col">
+                                        <div class="input-group">
+                                            <span class="input-group-text">
+                                                <div class="form-check">
+                                                    <input id="zplRewindFault" type="checkbox" class="form-check-input _big">
+                                                    <label class="form-check-label" for="zplRewindFault">Rewind Fault</label>
+                                                </div>
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </fieldset>
+                            <div class="tab-pane fade" id="zpl-warnings-content" role="tabpanel" aria-labelledby="zpl-warnings">
+                                <div class="row row-cols-3 config-col">
+                                    <div class="col">
+                                        <div class="input-group">
+                                            <span class="input-group-text bg-warning-subtle">
+                                                <div class="form-check">
+                                                    <input id="zplHqesMediaNearEnd" type="checkbox" class="form-check-input _big">
+                                                    <label class="form-check-label" for="zplHqesMediaNearEnd">Media Near End</label>
+                                                </div>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="input-group">
+                                            <span class="input-group-text bg-warning-subtle">
+                                                <div class="form-check">
+                                                    <input id="zplHqesRibbonNearEnd" type="checkbox" class="form-check-input _big">
+                                                    <label class="form-check-label" for="zplHqesRibbonNearEnd">Need Media Calibrate</label>
+                                                </div>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="input-group">
+                                            <span class="input-group-text bg-warning-subtle">
+                                                <div class="form-check">
+                                                    <input id="zplHqesReplacePrinthead" type="checkbox" class="form-check-input _big">
+                                                    <label class="form-check-label" for="zplHqesReplacePrinthead">Replace Printhead</label>
+                                                </div>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="input-group">
+                                            <span class="input-group-text bg-warning-subtle">
+                                                <div class="form-check">
+                                                    <input id="zplHqesCleanPrinthead" type="checkbox" class="form-check-input _big">
+                                                    <label class="form-check-label" for="zplHqesCleanPrinthead">Clean Printhead</label>
+                                                </div>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="zpl-errors-content" role="tabpanel" aria-labelledby="zpl-errors">
+                                <div class="row row-cols-3 config-col">
+                                    <div class="col">
+                                        <div class="input-group">
+                                            <span class="input-group-text bg-danger-subtle">
+                                                <div class="form-check">
+                                                    <input id="zplHqesMediaOut" type="checkbox" class="form-check-input _big">
+                                                    <label class="form-check-label" for="zplHqesMediaOut">Media Out</label>
+                                                </div>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="input-group">
+                                            <span class="input-group-text bg-danger-subtle">
+                                                <div class="form-check">
+                                                    <input id="zplHqesRibbonOut" type="checkbox" class="form-check-input _big">
+                                                    <label class="form-check-label" for="zplHqesRibbonOut">Ribbon Out</label>
+                                                </div>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="input-group">
+                                            <span class="input-group-text bg-danger-subtle">
+                                                <div class="form-check">
+                                                    <input id="zplHqesHeadOpen" type="checkbox" class="form-check-input _big">
+                                                    <label class="form-check-label" for="zplHqesHeadOpen">Head Open</label>
+                                                </div>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="input-group">
+                                            <span class="input-group-text bg-danger-subtle">
+                                                <div class="form-check">
+                                                    <input id="zplHqesCutterFault" type="checkbox" class="form-check-input _big">
+                                                    <label class="form-check-label" for="zplHqesCutterFault">Cutter Fault</label>
+                                                </div>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="input-group">
+                                            <span class="input-group-text bg-danger-subtle">
+                                                <div class="form-check">
+                                                    <input id="zplHqesPrintheadOverTemp" type="checkbox" class="form-check-input _big">
+                                                    <label class="form-check-label" for="zplHqesPrintheadOverTemp">Printhead Over-Temp</label>
+                                                </div>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="input-group">
+                                            <span class="input-group-text bg-danger-subtle">
+                                                <div class="form-check">
+                                                    <input id="zplHqesMotorOverTemp" type="checkbox" class="form-check-input _big">
+                                                    <label class="form-check-label" for="zplHqesMotorOverTemp">Motor Over-Temp</label>
+                                                </div>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="input-group">
+                                            <span class="input-group-text bg-danger-subtle">
+                                                <div class="form-check">
+                                                    <input id="zplHqesBadPrintheadElement" type="checkbox" class="form-check-input _big">
+                                                    <label class="form-check-label" for="zplHqesBadPrintheadElement">Bad Printhead Element</label>
+                                                </div>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="input-group">
+                                            <span class="input-group-text bg-danger-subtle">
+                                                <div class="form-check">
+                                                    <input id="zplHqesPrintheadDetectionError" type="checkbox" class="form-check-input _big">
+                                                    <label class="form-check-label" for="zplHqesPrintheadDetectionError">Printhead Detection Error</label>
+                                                </div>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <ul class="nav nav-tabs pt-2 is-esc" id="escposConfigsTab" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link fw-semibold active" id="escpos-status" data-bs-toggle="tab" data-bs-target="#escpos-status-content" type="button" role="tab" aria-controls="escpos-status-content" aria-selected="true">ESC/POS Status</button>
+                          </li>
+                        </ul>
+                        <div class="tab-content is-esc" id="escposConfigsTabsContent">
+                            <div class="tab-pane fade show active" id="escpos-status-content" role="tabpanel" aria-labelledby="escpos-status">
+                                <div class="row row-cols-3 config-col">
+                                    <div class="col">
+                                        <div class="input-group">
+                                            <span class="input-group-text">
+                                                <div class="form-check">
+                                                    <input id="escposOnline" type="checkbox" class="form-check-input _big">
+                                                    <label class="form-check-label" for="escposOnline">Online</label>
+                                                </div>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="input-group">
+                                            <span class="input-group-text">
+                                                <div class="form-check">
+                                                    <input id="escposPaperFeedPressed" type="checkbox" class="form-check-input _big">
+                                                    <label class="form-check-label" for="escposPaperFeedPressed">Paper Feed Pressed</label>
+                                                </div>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="input-group">
+                                            <span class="input-group-text bg-warning-subtle">
+                                                <div class="form-check">
+                                                    <input id="escposCoverOpen" type="checkbox" class="form-check-input _big">
+                                                    <label class="form-check-label" for="escposCoverOpen">Cover Open</label>
+                                                </div>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="input-group">
+                                            <span class="input-group-text">
+                                                <div class="form-check">
+                                                    <input id="escposPaperBeingFed" type="checkbox" class="form-check-input _big">
+                                                    <label class="form-check-label" for="escposPaperBeingFed">Paper Being Fed</label>
+                                                </div>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="input-group">
+                                            <span class="input-group-text">
+                                                <div class="form-check">
+                                                    <input id="escposPaperEnd" type="checkbox" class="form-check-input _big">
+                                                    <label class="form-check-label" for="escposPaperEnd">Paper End</label>
+                                                </div>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="input-group">
+                                            <span class="input-group-text bg-danger-subtle">
+                                                <div class="form-check">
+                                                    <input id="escposErrorOccurred" type="checkbox" class="form-check-input _big">
+                                                    <label class="form-check-label" for="escposErrorOccurred">Error Occurred</label>
+                                                </div>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="input-group">
+                                            <span class="input-group-text bg-danger-subtle">
+                                                <div class="form-check">
+                                                    <input id="escposRecoverableError" type="checkbox" class="form-check-input _big">
+                                                    <label class="form-check-label" for="escposRecoverableError">Recoverable Error</label>
+                                                </div>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="input-group">
+                                            <span class="input-group-text bg-danger-subtle">
+                                                <div class="form-check">
+                                                    <input id="escposCutterError" type="checkbox" class="form-check-input _big">
+                                                    <label class="form-check-label" for="escposCutterError">Auto Cutter Error</label>
+                                                </div>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="input-group">
+                                            <span class="input-group-text bg-danger-subtle">
+                                                <div class="form-check">
+                                                    <input id="escposUnrecoverableError" type="checkbox" class="form-check-input _big">
+                                                    <label class="form-check-label" for="escposUnrecoverableError">Unrecoverable Error</label>
+                                                </div>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="input-group">
+                                            <span class="input-group-text bg-danger-subtle">
+                                                <div class="form-check">
+                                                    <input id="escposAutoRecoverableError" type="checkbox" class="form-check-input _big">
+                                                    <label class="form-check-label" for="escposAutoRecoverableError">Autorecoverable Error</label>
+                                                </div>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="input-group">
+                                            <span class="input-group-text bg-warning-subtle">
+                                                <div class="form-check">
+                                                    <input id="escposPaperLow" type="checkbox" class="form-check-input _big">
+                                                    <label class="form-check-label" for="escposPaperLow">Paper Low</label>
+                                                </div>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="modal-footer p-1">
                         <button id="btn-close-save-settings" type="button" class="btn btn-secondary btn-close-save-settings" data-bs-dismiss="modal"><i class="glyphicon glyphicon-remove"></i> Close</button>

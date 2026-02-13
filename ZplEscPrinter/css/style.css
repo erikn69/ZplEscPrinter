@@ -38,36 +38,52 @@ input[type=checkbox]._big, input[type=radio]._big, ._big>input[type=checkbox], .
     margin-right: 10px;
 }
 
-.escpos-col {
-    padding-right: 5px;
-    padding-left: 0;
+#zplConfigsTab .nav-link {
+    padding: 1px var(--bs-nav-link-padding-x);
 }
-.escpos-col > .col {
+
+.config-col {
+    padding-right: 13px;
+    padding-left: 8px;
+    padding-top: 5px;
+}
+
+.config-col > .col .form-check {
+    overflow: hidden;
+}
+
+.config-col > .col {
     margin-right: 0;
     padding-right: 0;
     margin-bottom: 2px;
     padding-left: 6px;
 }
-.escpos-col > .col label {
+.config-col > .col label {
     font-size: 11px;
     line-height: 1;
     font-weight: bold;
     margin-left: -5px;
     margin-top: 6px;
+    margin-bottom: 3px;
 }
-.escpos-col > .col .form-check {
+.config-col > .col .form-check {
     min-height: auto !important;
 }
-.escpos-col > .col > div > span {
+.config-col > .col > div > span {
     width: 100%;
     padding: 0 0.3rem;
     padding-bottom: 1px;
 }
-.escpos-col > .col input[type=checkbox]._big {
+.config-col > .col input[type=checkbox]._big {
     -ms-transform: scale(1.2);
     -moz-transform: scale(1.2);
     -webkit-transform: scale(1.2);
     -o-transform: scale(1.2);
     margin-top: .25em;
     margin-right: 5px;
+    position: absolute;
+}
+
+.modal .modal-footer .btn {
+    margin-right: 0;
 }

@@ -1,7 +1,7 @@
 # Zpl - Esc/Pos Printer
 
 Printer emulator for Zpl, Esc/Pos rendering engine. The emulator is based on the [labelary](http://labelary.com/service.html) web service.
-You can configure print density, label size and the tcp server to listen for any incoming labels.
+You can configure print density, label size and the TCP server to listen for any incoming labels.
 
 [Releases](https://github.com/erikn69/ZplEscPrinter/releases/latest)
 
@@ -106,7 +106,7 @@ The app now runs standalone via Electron.
 ### Version 1.5
 
 * **New** Support to print multiple labels in one request.
-* **New** Optional setting to keep tcp connection alive.
+* **New** Optional setting to keep TCP connection alive.
 
 ### Version 1.4.1
 

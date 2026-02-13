@@ -26,16 +26,22 @@ class EscposCommands {
     }
   }
 
+  _isTruthy(val) {
+    return [1, "1", true, "true"].includes(val);
+  }
+
   /**
    * @returns {number[]} - The status byte for the escpos printer
    */
   getEscposStatus() {
+    const c = this.configs;
+    const t = this._isTruthy.bind(this);
     let returnBytes = [0x00];
-    if (![1, "1", true, "true"].includes(this.configs.escposOnline)) {
+    if (!t(c.escposOnline)) {
       // Bit 3 set indicates that the printer is offline
       returnBytes[0] |= 0b00001000;
     }
-    if ([1, "1", true, "true"].includes(this.configs.escposPaperFeedPressed)) {
+    if (t(c.escposPaperFeedPressed)) {
       // Bit 6 set indicates that the paper feed button is pressed
       returnBytes[0] |= 0b01000000;
     }
@@ -44,24 +50,26 @@ class EscposCommands {
   }
 
   getOfflineCause() {
+    const c = this.configs;
+    const t = this._isTruthy.bind(this);
     let returnBytes = [0x00];
 
-    if ([1, "1", true, "true"].includes(this.configs.escposCoverOpen)) {
+    if (t(c.escposCoverOpen)) {
       // Bit 2 set indicates that the cover is open
       returnBytes[0] |= 0b00000100;
     }
 
-    if ([1, "1", true, "true"].includes(this.configs.escposPaperBeingFed)) {
+    if (t(c.escposPaperBeingFed)) {
       // Bit 3 set indicates that the paper is being fed by the paper feed button
       returnBytes[0] |= 0b00001000;
     }
 
-    if ([1, "1", true, "true"].includes(this.configs.escposPaperEnd)) {
+    if (t(c.escposPaperEnd)) {
       // Bit 5 set indicates that the paper is being fed by the paper feed button
       returnBytes[0] |= 0b00100000;
     }
 
-    if ([1, "1", true, "true"].includes(this.configs.escposErrorOccurred)) {
+    if (t(c.escposErrorOccurred)) {
       // Bit 6 set indicates that an error has occurred
       returnBytes[0] |= 0b01000000;
     }
@@ -70,24 +78,26 @@ class EscposCommands {
   }
 
   getErrorCause() {
+    const c = this.configs;
+    const t = this._isTruthy.bind(this);
     let returnBytes = [0x00];
 
-    if ([1, "1", true, "true"].includes(this.configs.escposRecoverableError)) {
+    if (t(c.escposRecoverableError)) {
       // Bit 2 set indicates that a recoverable error has occurred
       returnBytes[0] |= 0b00000100;
     }
 
-    if ([1, "1", true, "true"].includes(this.configs.escposCutterError)) {
+    if (t(c.escposCutterError)) {
       // Bit 3 set indicates that an auto cutter error has occurred
       returnBytes[0] |= 0b00001000;
     }
 
-    if ([1, "1", true, "true"].includes(this.configs.escposUnrecoverableError)) {
+    if (t(c.escposUnrecoverableError)) {
       // Bit 5 set indicates that an unrecoverable error has occurred
       returnBytes[0] |= 0b00100000;
     }
 
-    if ([1, "1", true, "true"].includes(this.configs.escposAutoRecoverableError)) {
+    if (t(c.escposAutoRecoverableError)) {
       // Bit 6 set indicates that an auto recoverable error has occurred
       returnBytes[0] |= 0b01000000;
     }
@@ -96,9 +106,11 @@ class EscposCommands {
   }
 
   getRollPaperStatus() {
+    const c = this.configs;
+    const t = this._isTruthy.bind(this);
     let returnBytes = [0x00];
 
-    if ([1, "1", true, "true"].includes(this.configs.escposPaperLow)) {
+    if (t(c.escposPaperLow)) {
       // Bit 6 set indicates that the paper is low
       returnBytes[0] |= 0b00001100;
     }
