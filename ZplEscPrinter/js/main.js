@@ -187,7 +187,7 @@ async function zpl(data){
             .format(configs.density, width>15.0 ? 15 : width, height);
         let blob = await displayZplImage(api_url, zpl, width, height);
 
-        if (!_isTruthy(includes(configs.saveLabels))) {
+        if (!_isTruthy(configs.saveLabels)) {
             continue;
         }
 
